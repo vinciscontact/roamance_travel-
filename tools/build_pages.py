@@ -131,7 +131,7 @@ def footer(extra_js=''):
         <div><h4>Explore</h4><ul data-sd-dim-group>{links}</ul></div>
         <div><h4>Policies</h4><ul data-sd-dim-group><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms-and-conditions/">Terms &amp; Conditions</a></li><li><a href="/cancellation-refund-policy/">Cancellation &amp; Refund Policy</a></li></ul></div>
       </div>
-      <div class="foot-base"><span>© <span data-year></span> Roamance Trips and Holidays</span><span>More Than a Journey. A Family That Travels With You.</span></div>
+      <div class="foot-base"><span>© <span data-year></span> Roamance Trips and Holidays</span><span>Designed by <a class="credit-link" href="https://vincisglobal.com" target="_blank" rel="noopener" data-sd-no-transition>TheVincis</a></span></div>
     </div>
   </div>
 </footer>
