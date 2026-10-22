@@ -184,10 +184,18 @@ def relativise(html, path):
         html = html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + BASE_SCRIPT, 1)
     return html
 
+def inline_sprite(html):
+    """Embed the logo symbols in the page so the loader shows the logo instantly (no extra request)."""
+    sprite = open(os.path.join(ROOT, 'assets/img/logo-sprite.svg'), encoding='utf-8').read()
+    sprite = sprite.replace('<svg xmlns="http://www.w3.org/2000/svg">', '<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true" focusable="false">')
+    sprite = re.sub(r'<!--.*?-->\n?', '', sprite)
+    html = html.replace('<body>\n', '<body>\n' + sprite + '\n', 1)
+    return html.replace('href="/assets/img/logo-sprite.svg#', 'href="#')
+
 def page(path, title, desc, pre_line, body, noindex=False):
     extra = ('<script src="/assets/js/world-dots.js"></script>\n<script src="/assets/js/hero.js"></script>\n') if path == '/' else ''
     html = head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer(extra)
-    return relativise(html, path)
+    return relativise(inline_sprite(html), path)
 
 def cta_band(h, p, btn, href='/contact-us/', bg='light'):
     cls = ' theme-dark' if bg == 'dark' else ''

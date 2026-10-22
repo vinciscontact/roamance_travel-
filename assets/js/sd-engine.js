@@ -819,6 +819,7 @@
           Promise.all([loadPromise, tracked, document.fonts ? document.fonts.ready : 0]).then(() => {
             pct && (pct.textContent = '100%');
             lines(ps, 'hide'); gsap.to(pct, { opacity: 0, duration: T.S, ease: E.in });
+            gsap.to(pre, { backgroundColor: 'transparent', duration: T.M, ease: E.inOut });   // let the logo's flight into the header show
             transition('out');
             const tl = gsap.timeline({ onComplete: () => { done(); resolve(); } });
             if (media) tl.fromTo(media, { scale: 1.5 }, { scale: 1, duration: 2 * T.L, ease: E.out }, 0);

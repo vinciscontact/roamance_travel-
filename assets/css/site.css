@@ -65,6 +65,7 @@ body::after{content:"";position:fixed;inset:0;z-index:1200;pointer-events:none;o
 
 /* ---------- preloader ---------- */
 .pre{background:var(--sd-paper);color:var(--sd-ink)}
+.sd-transition-cell,[data-sd-transition-over]{background:#fbde22}   /* page-change wipe in brand yellow */
 .pre>div{display:flex;flex-direction:column;align-items:center;text-align:center;width:min(92vw,760px);padding-inline:16px}
 .pre .logo{flex-direction:column;gap:clamp(14px,2vw,26px)}
 .pre .lw-bird{width:clamp(70px,8vw,120px);height:clamp(93px,10.6vw,160px)}
