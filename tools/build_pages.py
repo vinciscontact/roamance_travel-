@@ -1,4 +1,4 @@
-import os, sys
+import os, re, sys
 ROOT = sys.argv[1]
 PAPER, CREAM, NAVY = '#fffcf6', '#fbf3e2', '#1d2b3a'
 INK = CREAM   # default torn-edge colour = the cream band it leads into
@@ -159,8 +159,22 @@ def footer():
 </html>
 '''
 
+# Relative links, so the site works at a domain root AND in a sub-folder (GitHub Pages project sites).
+# 404.html can be served at any depth, so it gets a <base> pointing at the site root instead.
+BASE_SCRIPT = ('<script>document.write(\'<base href="\'+(location.hostname.endsWith(".github.io")'
+               '?"/"+location.pathname.split("/")[1]+"/":"/")+\'">\')</script>')
+
+def relativise(html, path):
+    depth = path.strip('/').count('/') + 1 if path.strip('/') and path != '/404' else 0
+    prefix = '../' * depth if depth else './'
+    html = re.sub(r'(href|src|content)="/(?!/)', lambda m: f'{m.group(1)}="{prefix}', html)
+    if path == '/404':
+        html = html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + BASE_SCRIPT, 1)
+    return html
+
 def page(path, title, desc, pre_line, body, noindex=False):
-    return head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer()
+    html = head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer()
+    return relativise(html, path)
 
 def cta_band(h, p, btn, href='/contact-us/', bg='light'):
     cls = ' theme-dark' if bg == 'dark' else ''

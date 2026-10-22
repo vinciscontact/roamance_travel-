@@ -6,7 +6,7 @@ A static site with no build step. Motion uses the Son Daven system (GSAP 3.13, S
 ```bash
 python -m http.server 5173
 ```
-Then open http://localhost:5173. Links are root-relative (`/about-us/`), so open the site through a server, not by double-clicking the HTML file.
+Then open http://localhost:5173. All links are relative, so the site works at a domain root or in a sub-folder such as GitHub Pages.
 
 ## Things to edit
 | What | Where |
@@ -24,4 +24,5 @@ Then open http://localhost:5173. Links are root-relative (`/about-us/`), so open
 - Replace the three policy pages with approved text. They are `noindex` until then.
 - Once the domain is confirmed: add `<link rel="canonical">` to each page, add a `sitemap.xml`, and enable the Sitemap line in `robots.txt`.
 - Add the city to page titles if you are targeting local search, for example "Travel Agency in Bengaluru".
-- Hosting: upload the folder as it is (Hostinger `public_html`, Netlify, Vercel or Cloudflare Pages). `404.html` is picked up automatically on most hosts.
+- Hosting: upload the folder as it is (GitHub Pages, Hostinger `public_html`, Netlify, Vercel or Cloudflare Pages). `404.html` is picked up automatically on most hosts.
+- GitHub Pages: Settings → Pages → Source: *Deploy from a branch* → `main` / `(root)`. `.nojekyll` is included so every file is served as is.

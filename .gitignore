@@ -1,8 +1,6 @@
 # Local tooling
 .claude/
 
-# Duplicate photo folder (the site uses assets/img)
-gallery/img/
 
 # OS / editor
 .DS_Store
