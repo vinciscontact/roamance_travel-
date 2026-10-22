@@ -1,0 +1,613 @@
+import os, sys
+ROOT = sys.argv[1]
+PAPER, CREAM, NAVY = '#fffcf6', '#fbf3e2', '#1d2b3a'
+INK = CREAM   # default torn-edge colour = the cream band it leads into
+
+NAV = [('/', 'Home'), ('/about-us/', 'About Us'), ('/tour-packages/', 'Tour Packages'), ('/gallery/', 'Gallery'), ('/contact-us/', 'Contact Us')]
+
+def img(name, art, alt, extra=''):
+    lazy = '' if 'loading=' in extra else 'loading="lazy" '
+    return (f'<img src="/assets/img/{name}.jpg" alt="{alt}" data-art="{art}" {lazy}decoding="async" '
+            f'onerror="this.dataset.missing=1"{(" " + extra) if extra else ""}>')
+
+def torn(side, seed, color=INK):
+    m = 'margin-bottom:-1px' if side == 'bottom' else 'margin-top:-1px'
+    return f'<div data-sd-torn="{side}" data-sd-torn-seed="{seed}" style="color:{color};{m}"></div>'
+
+def plus(attr='data-sd-expand-icon'):
+    return f'<span class="plus" aria-hidden="true"><i {attr}></i></span>'
+
+def faq(items):
+    out = []
+    for q, a, wrap in items:
+        w = f' data-biz-wrap="{wrap}"' if wrap else ''
+        out.append(f'''      <div class="acc" data-sd-acc{w}><button data-sd-acc-btn aria-expanded="false">{q} {plus("data-sd-acc-icon")}</button>
+        <div data-sd-acc-body><p data-sd-acc-p>{a}</p></div></div>''')
+    return '\n'.join(out)
+
+FAQ = {
+  'what': ('What is Roamance Trips and Holidays?', 'Roamance Trips and Holidays is a travel business focused on thoughtfully planned holidays, personal attention and clear communication. Our approach puts travellers and their experiences at the centre of holiday planning.', ''),
+  'types': ('What types of holidays can I enquire about?', 'You can enquire about domestic holidays, international trips, family holidays, honeymoons, solo travel and luxury escapes. <a href="/contact-us/">Contact our team</a> to discuss availability and suitable options.', ''),
+  'quote': ('How do I request a holiday quotation?', 'Share your preferred destination, departure city, travel dates, number of travellers and approximate budget. These details help us discuss suitable options and prepare a relevant quotation.', ''),
+  'custom': ('Can I request a customised itinerary?', 'Yes. Tell us your preferred destinations, pace, accommodation preferences and experiences. Our team will discuss the arrangements available for your trip.', ''),
+  'incl': ('What is included in a tour package?', 'Inclusions vary by package. Refer to your quotation for accommodation, transport, meals, activities and other arrangements. Review the exclusions and booking terms before confirming.', ''),
+  'cost': ('How much does a holiday package cost?', 'The cost depends on your destination, dates, trip duration, number of travellers, accommodation and selected arrangements. <a href="/contact-us/">Request a quotation</a> based on your travel preferences.', ''),
+  'visa': ('Are flights and visa fees included?', 'Check your specific quotation. Flights, visa fees, insurance, taxes and other charges should be identified as included, excluded or separately payable.', ''),
+  'where': ('Where is Roamance Trips and Holidays located?', 'Roamance Trips and Holidays is located at <span data-biz="fullAddress"></span>. Contact us on <span data-biz="phone" data-fallback="the number on our contact page"></span> or <span data-biz="email" data-fallback="email"></span> for holiday enquiries.', 'address'),
+}
+
+def faq_section(keys, title='Questions, Answered', bg='light'):
+    return f'''<section class="pad wrap" data-sd-bg="{bg}" id="faq">
+  <div class="faq">
+    <div data-sd-reveal-group>
+      <p class="eyebrow" data-sd-reveal="lines">Frequently asked</p>
+      <h2 data-sd-reveal="words" style="margin-top:16px">{title}</h2>
+    </div>
+    <div>
+{faq([FAQ[k] for k in keys])}
+    </div>
+  </div>
+</section>'''
+
+def head(title, desc, path, noindex=False):
+    robots = '<meta name="robots" content="noindex, follow">' if noindex else '<meta name="robots" content="index, follow">'
+    return f'''<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content="{desc}">
+{robots}
+<meta name="theme-color" content="{PAPER}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Roamance Trips and Holidays">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="/assets/img/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Add <link rel="canonical" href="https://YOUR-DOMAIN{path}"> once the production domain is confirmed -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231d2b3a'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5b50f'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/sd-base.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>'''
+
+def chrome(path, pre_line):
+    links = []
+    for href, label in NAV:
+        cur = ' aria-current="page"' if href == path else ''
+        links.append(f'<a href="{href}"{cur} class="swap" data-sd-hover-swap><span data-sd-hover-text>{label}</span><span data-sd-hover-text aria-hidden="true">{label}</span></a>')
+    menu = ''.join(f'<a href="{h}" data-sd-menu-h>{l}</a>' for h, l in NAV)
+    return f'''
+<!-- PRELOADER (first visit only) -->
+<div class="pre" data-sd-preloader>
+  <div>
+    <a href="/" class="logo" data-sd-preloader-logo aria-label="Roamance Trips and Holidays — home"><b>Roamance</b><small>Trips &amp; Holidays</small></a>
+    <p class="eyebrow pre-line" data-sd-preloader-p>{pre_line}</p>
+  </div>
+  <span class="pre-pct" data-sd-preloader-percent>0%</span>
+</div>
+
+<header data-sd-header data-sd-theme-target>
+  <div data-sd-header-bg></div>
+  <div class="hdr">
+    <div class="logo-slot" data-sd-logo-slot></div>
+    <nav aria-label="Main">{''.join(links)}</nav>
+    <div class="hdr-cta">
+      <a href="/contact-us/" class="btn" data-sd-magnetic="20"><span data-sd-magnetic-inner>Plan My Holiday</span></a>
+      <button class="burger" data-sd-menu-open aria-label="Open menu"><i data-sd-burger="top"></i><i data-sd-burger="mid"></i><i data-sd-burger="bot"></i></button>
+    </div>
+  </div>
+</header>
+'''
+
+def footer():
+    links = ''.join(f'<li><a href="{h}">{l}</a></li>' for h, l in NAV)
+    menu = ''.join(f'<a href="{h}" data-sd-menu-h>{l}</a>' for h, l in NAV)
+    return f'''
+{torn('bottom', 27, NAVY)}
+<footer class="foot theme-navy" data-sd-footer-zoom data-sd-bg="navy">
+  <div class="sd-sticky">
+    <div class="foot-bg" data-sd-footer-bg></div>
+    <div class="foot-content" data-sd-footer-content>
+      <h2>Your Holidays, Closer to Heart.</h2>
+      <div class="btn-row"><a href="/contact-us/" class="btn" data-sd-magnetic="30"><span data-sd-magnetic-inner>Plan My Holiday</span></a><a href="/tour-packages/" class="btn ghost">Explore Tour Packages</a></div>
+      <div class="foot-cols">
+        <div>
+          <h4>Roamance Trips and Holidays</h4>
+          <p>Thoughtfully planned domestic and international holidays, with personal care at every step.</p>
+          <p style="margin-top:14px" data-biz-wrap="phone email"><a data-biz-wrap="phone" data-biz-href="phone" data-biz="phone"></a><span data-biz-wrap="phone"> &nbsp;·&nbsp; </span><a data-biz-wrap="email" data-biz-href="email" data-biz="email"></a></p>
+          <p style="margin-top:6px" data-biz-wrap="address" data-biz="fullAddress"></p>
+        </div>
+        <div><h4>Explore</h4><ul data-sd-dim-group>{links}</ul></div>
+        <div><h4>Policies</h4><ul data-sd-dim-group><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms-and-conditions/">Terms &amp; Conditions</a></li><li><a href="/cancellation-refund-policy/">Cancellation &amp; Refund Policy</a></li></ul></div>
+      </div>
+      <div class="foot-base"><span>© <span data-year></span> Roamance Trips and Holidays</span><span>More Than a Journey. A Family That Travels With You.</span></div>
+    </div>
+  </div>
+</footer>
+
+<div data-sd-menu class="theme-navy" role="dialog" aria-label="Menu">
+  <div class="menu-inner">
+    <nav data-sd-dim-group aria-label="Menu">{menu}</nav>
+    <div class="menu-meta" data-sd-menu-ctn>
+      <span>Your Holidays, Closer to Heart.</span>
+      <a data-biz-wrap="phone" data-biz-href="phone" data-biz="phone"></a>
+      <a data-biz-wrap="email" data-biz-href="email" data-biz="email"></a>
+    </div>
+  </div>
+</div>
+
+<div class="tip" data-sd-tip="open">Open</div>
+<div class="tip" data-sd-tip="drag">Drag</div>
+<div class="sd-transition" data-sd-transition><div data-sd-transition-over></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.15/dist/lenis.min.js"></script>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/sd-engine.js"></script>
+<script src="/assets/js/site.js"></script>
+</body>
+</html>
+'''
+
+def page(path, title, desc, pre_line, body, noindex=False):
+    return head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer()
+
+def cta_band(h, p, btn, href='/contact-us/', bg='light'):
+    cls = ' theme-dark' if bg == 'dark' else ''
+    return f'''<section class="pad wrap cta-band{cls}" data-sd-bg="{bg}" data-sd-reveal-group>
+  <h2 data-sd-reveal="words">{h}</h2>
+  <p class="lede" data-sd-reveal="lines">{p}</p>
+  <div class="btn-row" data-sd-reveal="block"><a class="btn" href="{href}" data-sd-magnetic="25"><span data-sd-magnetic-inner>{btn}</span></a></div>
+</section>'''
+
+# ------------------------------------------------------------------ HOME
+CATS = [
+  ('Domestic Holidays', 'Discover the beauty of India', 'Discover the beauty of India through relaxing escapes, cultural experiences, scenic hill stations and memorable family trips.', 'Explore India', '/tour-packages/#domestic', 'cat-domestic', 'hills', 'Traveller standing on a tea plantation hill at sunrise'),
+  ('International Holidays', 'New cultures, remarkable landscapes', 'Experience new cultures, remarkable landscapes and dream destinations with an international holiday planned around your interests.', 'Explore the World', '/tour-packages/#international', 'cat-international', 'alps', 'Lakeside alpine village with a church spire beneath misty mountains'),
+  ('Honeymoon &amp; Romantic Getaways', 'Time that brings you closer', 'Celebrate your time together with a holiday that brings you closer, from peaceful retreats to exciting new discoveries.', 'Plan Your Romantic Escape', '/tour-packages/#honeymoon', 'cat-honeymoon', 'couple', 'Couple walking hand in hand along the shore at sunset'),
+  ('Family Holidays', 'Laughter and quality time', 'Make room for laughter, shared discoveries and quality time with a holiday designed around your family.', 'Plan a Family Trip', '/tour-packages/#family', 'cat-family', 'family', 'Family watching the waves together on a beach'),
+  ('Personalised Holidays', 'A holiday that feels right', 'Tell us your destination, travel dates, preferences and budget. Let us help shape a holiday that feels right for you.', 'Create My Itinerary', '/contact-us/', 'cat-personalised', 'plan', 'Hands marking a route on a city map beside glasses and pencils'),
+]
+cards = []
+for i, (name, h, p, cta, href, im, art, alt) in enumerate(CATS, 1):
+    cards.append(f'''        <li class="card theme-navy" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
+          {img(im, art, alt, 'loading="eager"')}
+          <div class="card-top"><span class="num eyebrow">0{i}</span>{plus()}</div>
+          <h3 data-sd-expand-name>{name}</h3>
+          <div class="card-info" data-sd-expand-info>
+            <h3 data-sd-expand-h>{h}</h3><div class="rule" data-sd-expand-rule></div>
+            <p data-sd-expand-p>{p}</p>
+            <a class="link" href="{href}">{cta}</a>
+            <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
+          </div>
+        </li>''')
+
+DESTS = [
+  ('Kerala', 'India', 'domestic', 'dest-kerala', 'backwater', 'Houseboat travelling through palm-lined Kerala backwaters'),
+  ('Goa', 'India', 'domestic', 'dest-goa', 'beach', 'Palm-fringed beach in Goa at golden hour'),
+  ('Kashmir', 'India', 'domestic', 'dest-kashmir', 'snow', 'Colourful shikaras moored on Dal Lake, Kashmir'),
+  ('Bali', 'International', 'international', 'dest-bali', 'hills', 'Green rice terraces in Bali surrounded by palms'),
+  ('Europe', 'International', 'international', 'dest-europe', 'alps', 'Village between steep mountains and a lake in Europe'),
+  ('Maldives', 'International', 'international', 'dest-maldives', 'island', 'Overwater villas above a turquoise Maldives lagoon'),
+]
+dests = '\n'.join(f'''    <a class="dest" href="/tour-packages/#{sec}"><div class="frame">{img(im, art, alt)}</div><div class="dest-meta"><h3>{n}</h3><span>{reg}</span></div></a>''' for n, reg, sec, im, art, alt in DESTS)
+
+REASONS = [
+  ('People Before Profit', 'Your happiness and experience guide the way we plan your journey.'),
+  ('Clarity at Every Step', 'Understand your itinerary, package inclusions, exclusions and costs before you book.'),
+  ('Thoughtful Personal Attention', 'We listen to your preferences and help you make informed travel choices.'),
+  ('Luxury With a Heart', 'For us, a special holiday combines comfort, memorable experiences and the reassurance of being cared for.'),
+]
+reasons = '\n'.join(f'''      <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>{h}</h3><p>{p}</p></div>''' for h, p in REASONS)
+
+home = f'''<section class="hero-area" data-sd-hero-out data-sd-bg="light">
+  <div class="hero-sticky">
+    <div class="hero-card" data-sd-hero-card>
+      <div class="hero-media" data-sd-intro-media><canvas class="sd-linocut" id="hero-canvas" role="img" aria-label="Engraved illustration of a houseboat on palm-lined Kerala backwaters"></canvas></div>
+    </div>
+    <div class="hero-copy" data-sd-hero-stage>
+      <div data-sd-hero-copy>
+        <p class="eyebrow" data-sd-intro="p" style="margin-bottom:18px">Roamance Trips and Holidays</p>
+        <h1 data-sd-intro="h">Your Holidays,<br> Closer to Heart.</h1>
+      </div>
+      <div class="hero-side" data-sd-intro="ctn">
+        <p class="lede">Thoughtfully planned holidays. Meaningful experiences. Care that travels with you.</p>
+        <div class="btn-row"><a class="btn" href="/tour-packages/" data-sd-magnetic="20"><span data-sd-magnetic-inner>Explore Tour Packages</span></a><a class="btn ghost" href="/contact-us/">Plan My Holiday</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pad wrap" data-sd-bg="light">
+  <p class="eyebrow center" style="margin-bottom:24px" data-sd-reveal="lines">More Than a Journey. A Family That Travels With You.</p>
+  <p class="quote" data-sd-highlight>At Roamance, every holiday begins with understanding you.</p>
+  <div class="qs" data-sd-reveal="lines"><span>Where do you dream of going?</span><span>What makes a holiday special for you?</span><span>Who will be sharing the experience?</span></div>
+  <div class="grid2 top" style="margin-top:clamp(64px,10vh,120px)">
+    <div class="frame r-16x10" data-sd-zoom>{img('home-intro', 'plan', 'Latte beside an open map, ready for travel planning', 'data-sd-zoom-target')}</div>
+    <div data-sd-reveal-group>
+      <div class="rule" data-sd-reveal="rule"></div>
+      <p data-sd-reveal="lines" style="margin-bottom:18px">Discover India and explore the world with Roamance Trips and Holidays. From family holidays and romantic getaways to solo adventures and luxury escapes, we help you plan a journey around the moments that matter to you.</p>
+      <p class="lede" data-sd-reveal="lines">Your answers help us shape a journey that feels personal, comfortable and memorable.</p>
+      <p data-sd-reveal="lines" style="margin-top:16px">With thoughtful planning, clear communication and genuine care, we want you to feel part of the Roamance family from your first enquiry to your return home.</p>
+      <div style="margin-top:28px" data-sd-reveal="block"><a class="link" href="/about-us/">Our story</a></div>
+    </div>
+  </div>
+</section>
+{torn('bottom', 3)}
+
+<section class="theme-dark" data-sd-bg="dark">
+  <div class="wrap hs-head" style="padding-top:clamp(72px,12vh,150px)" data-sd-reveal-group>
+    <h2 data-sd-reveal="words" style="max-width:11ch">Your Next Journey Starts Here</h2>
+    <p data-sd-reveal="lines">Five ways to travel with us. Tap a card to see what each holiday can feel like.</p>
+  </div>
+  <section class="hs" data-sd-hscroll>
+    <div class="sd-sticky">
+      <ul data-sd-hscroll-track style="list-style:none;margin:0">
+{chr(10).join(cards)}
+      </ul>
+    </div>
+  </section>
+</section>
+{torn('top', 9)}
+
+<section class="pad" data-sd-bg="light">
+  <h2 class="drift wrap" data-sd-parallax="drift"><span>Popular</span><span>Destinations</span></h2>
+  <div class="row wrap" style="margin-top:48px" data-sd-slider-reveal data-sd-tip-btn="drag">
+{dests}
+  </div>
+  <p class="wrap credit" style="margin-top:20px">Europe covers a range of countries — itineraries are shaped around the places you would like to see.</p>
+</section>
+
+<section data-sd-grow data-sd-bg="light">
+  <div class="grow-title"><h2 data-sd-grow-title>Why Travel<br>With Roamance?</h2></div>
+  <div class="grow-gap" data-sd-grow-gap></div>
+  <div class="wrap" style="padding-bottom:clamp(72px,13vh,170px)">
+    <div class="reasons" data-sd-reveal-group data-sd-index>
+{reasons}
+    </div>
+  </div>
+</section>
+
+{torn('bottom', 17, NAVY)}
+<section class="pad-s theme-navy" data-sd-bg="navy" aria-label="Our philosophy">
+  <div class="marquee" data-sd-marquee="26" aria-hidden="true">
+    <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
+    <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
+  </div>
+</section>
+{torn('top', 21, NAVY)}
+
+<section class="pad wrap" data-sd-bg="light">
+  <div class="grid2 top">
+    <div data-sd-reveal-group>
+      <p class="eyebrow" data-sd-reveal="lines">Close to home</p>
+      <h2 data-sd-reveal="words" style="margin-top:16px">Your Travel Partner in <span data-biz="city" data-fallback="Every Season"></span></h2>
+      <div class="rule" data-sd-reveal="rule" style="margin-top:32px"></div>
+      <p data-sd-reveal="lines">Looking for a travel agency<span data-biz-wrap="city"> in <span data-biz="city"></span></span> to help plan a domestic or international holiday? Connect with Roamance Trips and Holidays for personal guidance, tour package enquiries and thoughtful holiday planning.</p>
+      <div style="margin-top:28px" data-sd-reveal="block"><a class="btn" href="/contact-us/"><span>Talk to Our Team</span></a></div>
+    </div>
+    <div class="frame r-4x5 plx" data-sd-parallax-wrap>{img('home-local', 'city', 'Two friends planning a trip together on a laptop', 'data-sd-parallax="img"')}</div>
+  </div>
+</section>
+
+{faq_section(['what', 'types', 'quote', 'custom', 'where'])}
+
+{torn('bottom', 33)}
+{cta_band('Let’s Turn Your Travel Plans Into Beautiful Memories.', 'A destination on your mind? A special occasion coming up? Your next chapter begins with a conversation.', 'Talk to Our Team', bg='dark')}
+'''
+
+# ------------------------------------------------------------------ ABOUT
+about = f'''<section class="phero" data-sd-bg="light">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">About Roamance</p>
+  <h1 data-sd-intro="h">More Than a Journey. A Family That Travels With You.</h1>
+  <div class="phero-media" data-sd-intro-media data-sd-parallax-wrap>{img('about-hero', 'backwater', 'Lone rower crossing a calm lake at golden hour', 'data-sd-parallax="img" loading="eager"')}</div>
+</section>
+
+<section class="pad wrap" data-sd-bg="light" style="padding-top:0">
+  <div class="grid2 top">
+    <div data-sd-reveal-group>
+      <p class="eyebrow" data-sd-reveal="lines">01 — Our story</p>
+      <h2 data-sd-reveal="words" style="margin-top:16px">Our Story</h2>
+    </div>
+    <div data-sd-reveal-group>
+      <div class="rule" data-sd-reveal="rule"></div>
+      <p class="lede" data-sd-reveal="lines">Roamance Trips and Holidays began with a simple intention: to give every traveller a memorable, high-quality travel experience rooted in genuine care.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">We believe travel is about more than visiting places. It is about discovering the world, sharing precious moments and returning home with stories that stay with you.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">Our purpose goes beyond a booking. We want every journey to reflect the trust you place in us.</p>
+    </div>
+  </div>
+</section>
+{torn('bottom', 5)}
+
+<section class="pad wrap theme-dark" data-sd-bg="dark">
+  <div class="grid2 top">
+    <div class="frame r-3x4 plx" data-sd-parallax-wrap>{img('about-philosophy', 'family', 'Grandmother in a sari hugging her laughing granddaughter', 'data-sd-parallax="img"')}</div>
+    <div>
+      <div data-sd-reveal-group>
+        <p class="eyebrow" data-sd-reveal="lines">02 — Our philosophy</p>
+        <h2 data-sd-reveal="words" style="margin-top:16px">People Before Profit</h2>
+      </div>
+      <p class="quote" style="text-align:left;margin:40px 0 0" data-sd-highlight>Every traveller matters to us.</p>
+      <div data-sd-reveal-group style="margin-top:28px">
+        <p data-sd-reveal="lines">When you choose Roamance, we want you to feel welcomed, valued and respected. We take the time to understand your expectations so we can help plan a holiday that reflects what matters most to you.</p>
+        <p data-sd-reveal="lines" style="margin-top:18px">Your happiness is at the heart of why we do what we do.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{torn('top', 13)}
+
+<section class="pad wrap" data-sd-bg="light">
+  <div data-sd-reveal-group style="max-width:1100px">
+    <p class="eyebrow" data-sd-reveal="lines">03 — Our promise</p>
+    <h2 data-sd-reveal="words" style="margin-top:16px">Openness, Honesty and Clarity</h2>
+  </div>
+  <div class="grid2 top" style="margin-top:48px" data-sd-reveal-group>
+    <p class="lede" data-sd-reveal="lines">Trust begins with clear information.</p>
+    <div>
+      <div class="rule" data-sd-reveal="rule" style="margin-top:0"></div>
+      <p data-sd-reveal="lines">Your holiday is an investment of money, time and anticipation. You deserve to understand what you are paying for, what your package includes and which expenses may be additional.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">We aim to explain our recommendations, communicate commitments clearly and help you make confident decisions before you travel.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pad-s" data-sd-bg="light" aria-label="Luxury with a heart">
+  <div class="marquee" data-sd-marquee="30" aria-hidden="true">
+    <div data-sd-marquee-list><span>Luxury With a Heart ✦</span><span>Luxury With a Heart ✦</span></div>
+    <div data-sd-marquee-list><span>Luxury With a Heart ✦</span><span>Luxury With a Heart ✦</span></div>
+  </div>
+</section>
+
+<section class="pad wrap" data-sd-bg="light" style="padding-top:clamp(24px,4vh,48px)">
+  <div class="grid2 top">
+    <div class="frame r-16x10" data-sd-zoom>{img('about-luxury', 'island', 'Infinity pool overlooking the sea and a rocky headland', 'data-sd-zoom-target')}</div>
+    <div data-sd-reveal-group>
+      <p class="eyebrow" data-sd-reveal="lines">04 — Luxury with a heart</p>
+      <div class="rule" data-sd-reveal="rule"></div>
+      <p class="lede" data-sd-reveal="lines">Luxury means different things to different travellers.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">It may be a beautiful hotel, an extraordinary destination or a special experience. It may also be an unhurried itinerary, thoughtful arrangements and the comfort of knowing your preferences have been heard.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">At Roamance, we believe personal attention and warm hospitality are essential parts of a memorable holiday.</p>
+    </div>
+  </div>
+</section>
+
+{torn('bottom', 33)}
+<section class="pad wrap cta-band theme-dark" data-sd-bg="dark" data-sd-reveal-group>
+  <p class="eyebrow" data-sd-reveal="lines">05 — Our intention</p>
+  <h2 data-sd-reveal="words" style="margin-top:18px">One Family. Countless Journeys.</h2>
+  <p class="lede" data-sd-reveal="lines">Whether you are planning a family holiday, honeymoon, solo adventure or international escape, our intention remains the same: to make your journey meaningful, trustworthy and memorable.</p>
+  <p data-sd-reveal="lines" style="margin-top:18px">We want you to return with more than photographs — with happiness, beautiful stories and the desire to explore again.</p>
+  <div class="btn-row" data-sd-reveal="block"><a class="btn" href="/contact-us/" data-sd-magnetic="25"><span data-sd-magnetic-inner>Plan Your Journey With Us</span></a></div>
+</section>
+'''
+
+# ------------------------------------------------------------------ TOUR PACKAGES
+PKS = [
+  ('domestic', 'Domestic Tour Packages', 'Explore India’s landscapes, heritage and local experiences. Choose a relaxing break, a sightseeing holiday or a journey that combines discovery with time to unwind.', 'Enquire About Domestic Holidays', 'pkg-domestic', 'backwater', 'City Palace on Lake Pichola in Udaipur, with a boat in front', 'Kerala · Goa · Kashmir'),
+  ('international', 'International Tour Packages', 'Discover destinations beyond India with a holiday that brings together your travel interests, available time and preferred experiences.', 'Enquire About International Holidays', 'pkg-international', 'alps', 'Cobbled old-town street in Europe with mountains beyond', 'Bali · Europe · Maldives'),
+  ('honeymoon', 'Honeymoon Packages', 'Begin a new chapter with meaningful time together. Share your idea of the perfect honeymoon, and let us help you explore suitable destinations and experiences.', 'Plan Our Honeymoon', 'pkg-honeymoon', 'couple', 'Couple sitting together watching the sunset', ''),
+  ('family', 'Family Holiday Packages', 'Bring everyone together for a holiday filled with shared experiences. Tell us your group size, age groups and preferences so we can help plan a suitable itinerary.', 'Plan Our Family Holiday', 'pkg-family', 'family', 'Family holding hands on a beach at sunset', ''),
+  ('luxury', 'Luxury Holidays', 'Explore premium stays and carefully selected experiences with personal attention to the details that matter to you.', 'Discuss a Luxury Escape', 'pkg-luxury', 'island', 'Resort pool deck with loungers beside a wooden lodge', ''),
+  ('customised', 'Customised Tour Packages', 'Have something specific in mind? Share your destination, departure city, dates, number of travellers and approximate budget. We will discuss the available options and help you shape your itinerary.', 'Request a Personalised Quote', 'pkg-customised', 'plan', 'Compass on a paper map among autumn leaves', ''),
+]
+def pk(i, d, dark=False):
+    sid, h, p, cta, im, art, alt, tag = d
+    tagline = f'<p class="eyebrow" data-sd-reveal="lines" style="margin-top:14px">{tag}</p>' if tag else ''
+    return f'''  <article class="pk{' flip' if i % 2 else ''}" id="{sid}">
+    <div class="pk-media" data-sd-parallax-wrap>{img(im, art, alt, 'data-sd-parallax="img"')}</div>
+    <div data-sd-reveal-group>
+      <span class="idx" data-sd-reveal="lines">0{i + 1} / 06</span>
+      <h2 data-sd-reveal="words">{h}</h2>
+      <div class="rule" data-sd-reveal="rule"></div>
+      <p data-sd-reveal="lines">{p}</p>
+      {tagline}
+      <div data-sd-reveal="block"><a class="btn" href="/contact-us/"><span>{cta}</span></a></div>
+    </div>
+  </article>'''
+pk_nav = ''.join(f'<a href="#{d[0]}">{d[1].replace(" Tour Packages", "").replace(" Holiday Packages", "").replace(" Packages", "").replace(" Holidays", "")}</a>' for d in PKS)
+checks = ''.join(f'<li data-sd-reveal="block">{c}</li>' for c in ['Itinerary', 'Accommodation', 'Transport', 'Meals', 'Activities', 'Inclusions', 'Exclusions', 'Booking terms'])
+tours = f'''<section class="phero" data-sd-bg="light">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">Tour Packages</p>
+  <h1 data-sd-intro="h">Find a Holiday That Feels Like You.</h1>
+  <div class="grid2 top" style="margin-top:32px" data-sd-intro="ctn">
+    <p class="lede">Explore domestic and international tour packages shaped around your interests, preferred pace and budget.</p>
+    <p>Whether you dream of a peaceful retreat, a cultural discovery or a celebration with loved ones, Roamance Trips and Holidays helps you take the next step.</p>
+  </div>
+  <nav class="pk-nav" aria-label="Package types" data-sd-intro="ctn">{pk_nav}</nav>
+</section>
+
+<section class="pad wrap" data-sd-bg="light" style="padding-top:clamp(24px,4vh,48px)">
+{pk(0, PKS[0])}
+{pk(1, PKS[1])}
+</section>
+{torn('bottom', 7)}
+<section class="pad wrap theme-dark" data-sd-bg="dark">
+{pk(2, PKS[2])}
+{pk(3, PKS[3])}
+</section>
+{torn('top', 15)}
+<section class="pad wrap" data-sd-bg="light">
+{pk(4, PKS[4])}
+{pk(5, PKS[5])}
+</section>
+
+{torn('bottom', 19)}
+<section class="pad wrap theme-dark" data-sd-bg="dark">
+  <div class="grid2" data-sd-reveal-group>
+    <h2 data-sd-reveal="words">Know Your Package Before You Book</h2>
+    <div>
+      <p data-sd-reveal="lines">Review your proposed itinerary, accommodation, transport arrangements, meals, activities, inclusions, exclusions and applicable booking terms.</p>
+      <p data-sd-reveal="lines" style="margin-top:18px">Package prices and availability depend on your travel dates and selected arrangements. Your quotation will explain the details relevant to your journey.</p>
+    </div>
+  </div>
+  <ul class="checks" data-sd-reveal-group>{checks}</ul>
+</section>
+{torn('top', 23)}
+
+{faq_section(['types', 'custom', 'incl', 'cost', 'visa'])}
+
+{cta_band('Tell Us Where You Would Love to Go.', 'Share your destination, dates and budget, and we will discuss the options with you.', 'Request a Personalised Quote')}
+'''
+
+# ------------------------------------------------------------------ GALLERY
+GAL = {
+  'india': ('Explore India', [
+    ('gal-india-1', 'backwater', 'Slow down in Kerala’s backwaters.', 'Small boat crossing palm-lined Kerala backwaters'),
+    ('gal-india-2', 'snow', 'Mornings on Dal Lake.', 'Shikara gliding across Dal Lake at sunset'),
+    ('gal-india-3', 'desert', 'Golden light in Rajasthan.', 'Mehrangarh Fort above the city of Jodhpur'),
+    ('gal-india-4', 'beach', 'Unhurried days in Goa.', 'Quiet Goan beach lined with coconut palms')]),
+  'world': ('International Escapes', [
+    ('gal-world-1', 'city', 'Discover Dubai after sunset.', 'Dubai skyline illuminated at dusk'),
+    ('gal-world-2', 'hills', 'Green terraces in Bali.', 'Terraced rice fields at Tegallalang, Bali'),
+    ('gal-world-3', 'alps', 'Lakeside towns of Europe.', 'Hallstatt village on the lake beneath green mountains'),
+    ('gal-world-4', 'island', 'Turquoise calm in the Maldives.', 'Wooden walkway leading to overwater villas')]),
+  'family': ('Family Moments', [
+    ('gal-family-1', 'family', 'Time together, beautifully spent.', 'Family standing together at the water’s edge at sunset'),
+    ('gal-family-2', 'hills', 'Hill-station afternoons.', 'Father holding his daughter at a hill-station viewpoint'),
+    ('gal-family-3', 'beach', 'Sandcastles and sea breeze.', 'Child digging in the sand beside a bucket'),
+    ('gal-family-4', 'family', 'Shared discoveries.', 'Family walking down a cobbled street beside a canal')]),
+  'romance': ('Romantic Getaways', [
+    ('gal-romance-1', 'couple', 'A sunset just for two.', 'Couple silhouetted on a beach at sunset'),
+    ('gal-romance-2', 'island', 'Quiet island evenings.', 'Draped canopy set up for two on a quiet shore'),
+    ('gal-romance-3', 'alps', 'Mountain air, warm hands.', 'Couple looking out at snow-capped mountains'),
+    ('gal-romance-4', 'backwater', 'Drifting slowly, together.', 'Couple in a canoe on a calm green lake')]),
+}
+btns = ''.join(f'<button data-sd-tab="{k}"{" class=\"is-active\"" if i == 0 else ""}>{v[0]}</button>' for i, (k, v) in enumerate(GAL.items()))
+panels = []
+for k, (label, items) in GAL.items():
+    figs = ''.join(f'<figure><div class="frame">{img(im, art, alt)}</div><figcaption>{cap}</figcaption></figure>' for im, art, cap, alt in items)
+    panels.append(f'<div class="g-panel" data-sd-tab-panel="{k}" role="tabpanel" aria-label="{label}"><div class="g-grid">{figs}</div></div>')
+gallery = f'''<section class="phero" data-sd-bg="light">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">Gallery</p>
+  <h1 data-sd-intro="h">Beautiful Places. Meaningful Moments.</h1>
+  <div class="grid2 top" style="margin-top:32px" data-sd-intro="ctn">
+    <p class="lede">Every journey has a story. Explore destinations, travel experiences and moments that inspire the next adventure.</p>
+    <p>From scenic landscapes to shared celebrations, discover what makes travelling so memorable.</p>
+  </div>
+</section>
+
+<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp(72px,13vh,170px)">
+  <div data-sd-tabs>
+    <div class="pill" data-sd-pill role="tablist" aria-label="Gallery categories"><span class="pill-bg" data-sd-pill-bg></span>{btns}</div>
+    <div class="g-tabs">
+      {''.join(panels)}
+    </div>
+  </div>
+  <p class="credit" style="margin-top:28px">Destination inspiration. Photographs are illustrative and do not show Roamance travellers.</p>
+</section>
+
+{torn('bottom', 31)}
+{cta_band('Picture Your Next Holiday', 'Found a destination you love? Tell us what caught your eye, and let’s explore the possibilities for your own journey.', 'Plan a Similar Experience', bg='dark')}
+'''
+
+# ------------------------------------------------------------------ CONTACT
+contact = f'''<section class="phero" data-sd-bg="light">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">Contact Us</p>
+  <h1 data-sd-intro="h">Every Memorable Holiday Begins With a Conversation.</h1>
+  <div class="grid2 top" style="margin-top:32px" data-sd-intro="ctn">
+    <p class="lede">Tell us where you would love to go. We will help you explore the possibilities.</p>
+    <p>Whether you are planning a domestic holiday, international trip, honeymoon or family getaway, Roamance Trips and Holidays would love to hear from you.</p>
+  </div>
+</section>
+
+<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp(72px,13vh,170px)">
+  <div class="ct">
+    <div>
+      <div data-sd-reveal-group>
+        <h2 data-sd-reveal="words" style="font-size:clamp(34px,4vw,64px)">Speak With Roamance</h2>
+        <div class="rule" data-sd-reveal="rule" style="margin-top:28px"></div>
+      </div>
+      <ul class="ct-list" data-sd-reveal="block">
+        <li data-biz-wrap="phone"><span>Call</span><a data-biz-href="phone" data-biz="phone"></a></li>
+        <li data-biz-wrap="whatsapp"><span>WhatsApp</span><a data-biz-href="whatsapp">Chat with our team</a></li>
+        <li data-biz-wrap="email"><span>Email</span><a data-biz-href="email" data-biz="email"></a></li>
+        <li data-biz-wrap="address"><span>Visit</span><span style="all:unset" data-biz="fullAddress"></span></li>
+        <li data-biz-wrap="hours"><span>Hours</span><span style="all:unset" data-biz="hours"></span></li>
+        <li><span>Enquire</span>Use the form to share your holiday idea — we will get back to you.</li>
+      </ul>
+      <div class="btn-row" style="margin-top:24px" data-biz-wrap="phone whatsapp mapUrl">
+        <a class="btn" data-biz-wrap="phone" data-biz-href="phone"><span>Call Us</span></a>
+        <a class="btn ghost" data-biz-wrap="whatsapp" data-biz-href="whatsapp">Chat on WhatsApp</a>
+        <a class="btn ghost" data-biz-wrap="mapUrl" data-biz-href="mapUrl">Get Directions</a>
+      </div>
+      <div class="frame r-4x3" style="margin-top:40px" data-sd-zoom>{img('contact', 'plan', 'Passport on an open notebook next to a cup of tea', 'data-sd-zoom-target')}</div>
+    </div>
+
+    <form id="enquiry" class="form" novalidate>
+      <h2 class="full" style="font-size:clamp(34px,4vw,64px)" data-sd-reveal="words">Tell Us About Your Holiday</h2>
+      <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="f-phone">Phone number</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
+      <div class="field full"><label for="f-email">Email address</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="f-dep">Departure city</label><input id="f-dep" name="departure" type="text" autocomplete="address-level2"></div>
+      <div class="field"><label for="f-dest">Preferred destination</label><input id="f-dest" name="destination" type="text" placeholder="Kerala, Bali, Europe…"></div>
+      <div class="field"><label for="f-dates">Tentative travel dates</label><input id="f-dates" name="dates" type="text" placeholder="e.g. 12–18 Dec"></div>
+      <div class="field" style="justify-content:flex-end"><label style="display:flex;gap:10px;align-items:center;padding:.9em 0;text-transform:none;letter-spacing:0;font-size:.95em;font-weight:400"><input type="checkbox" name="flexible" value="yes" style="width:auto"> My dates are flexible</label></div>
+      <div class="field"><div class="split"><div class="field" style="padding:0"><label for="f-ad">Adults</label><input id="f-ad" name="adults" type="number" min="1" value="2" inputmode="numeric"></div><div class="field" style="padding:0"><label for="f-ch">Children</label><input id="f-ch" name="children" type="number" min="0" value="0" inputmode="numeric"></div></div></div>
+      <div class="field"><div class="split"><div class="field" style="padding:0"><label for="f-bud">Approx. budget (₹)</label><input id="f-bud" name="budget" type="number" min="0" step="1000" inputmode="numeric"></div><div class="field" style="padding:0"><label for="f-basis">Basis</label><select id="f-basis" name="budgetBasis"><option value="total">Total</option><option value="per person">Per person</option></select></div></div></div>
+      <div class="field full"><label for="f-notes">Special preferences or requirements</label><textarea id="f-notes" name="notes" placeholder="Pace, hotel style, occasions, dietary needs, accessibility…"></textarea></div>
+      <div class="full">
+        <p class="consent">By submitting this form, you agree to be contacted about your enquiry. Please read our <a href="/privacy-policy/">Privacy Policy</a>.</p>
+        <button class="btn" type="submit" style="margin-top:22px">Send My Travel Enquiry</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<div data-biz-wrap="city">
+{torn('bottom', 11)}
+<section class="pad wrap theme-dark" data-sd-bg="dark">
+  <div class="grid2" data-sd-reveal-group>
+    <h2 data-sd-reveal="words">Holiday Planning in <span data-biz="city"></span></h2>
+    <p data-sd-reveal="lines">Connect with Roamance Trips and Holidays in <span data-biz="city"></span> for domestic and international tour package enquiries, honeymoon planning and personalised holiday discussions.</p>
+  </div>
+</section>
+{torn('top', 25)}
+</div>
+
+{faq_section(['quote', 'custom', 'where'])}
+'''
+
+def policy(name, path):
+    body = f'''<section class="phero" data-sd-bg="light">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">Policies</p>
+  <h1 data-sd-intro="h">{name}</h1>
+  <div class="prose" style="margin-top:40px" data-sd-intro="ctn">
+    <p class="lede">This policy is being finalised and will be published here soon.</p>
+    <p>For any questions in the meantime, please <a href="/contact-us/" style="text-decoration:underline">contact our team</a>.</p>
+  </div>
+</section>'''
+    return page(path, f'{name} — Roamance Trips and Holidays', f'{name} for Roamance Trips and Holidays.', 'Your Holidays, Closer to Heart.', body, noindex=True)
+
+notfound = '''<section class="phero" data-sd-bg="light" style="min-height:80vh">
+  <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">Page not found</p>
+  <h1 data-sd-intro="h">This Road Leads Nowhere.</h1>
+  <div style="margin-top:40px" data-sd-intro="ctn"><a class="btn" href="/"><span>Back to Home</span></a></div>
+</section>'''
+
+PAGES = {
+  'index.html': page('/', 'Roamance Trips and Holidays — Travel Agency for Domestic &amp; International Holidays', 'Plan domestic and international holidays with Roamance. Explore family trips, honeymoons and personalised travel with thoughtful care.', 'More than a journey — a family that travels with you', home),
+  'about-us/index.html': page('/about-us/', 'About Roamance — Holidays With Personal Care', 'Meet Roamance Trips and Holidays. Discover our people-first approach to travel, clear communication and meaningful holiday experiences.', 'People before profit', about),
+  'tour-packages/index.html': page('/tour-packages/', 'Domestic &amp; International Tour Packages — Roamance', 'Explore domestic and international holiday options with Roamance. Enquire about family trips, honeymoons, luxury escapes and customised itineraries.', 'Find a holiday that feels like you', tours),
+  'gallery/index.html': page('/gallery/', 'Travel Gallery — Roamance Trips and Holidays', 'Explore destination photographs and travel inspiration from Roamance. Find ideas for your next family holiday, romantic getaway or international trip.', 'Beautiful places, meaningful moments', gallery),
+  'contact-us/index.html': page('/contact-us/', 'Contact Roamance — Holiday Planning', 'Contact Roamance Trips and Holidays. Share your destination, dates and budget to discuss your next domestic or international holiday.', 'Every holiday begins with a conversation', contact),
+  'privacy-policy/index.html': policy('Privacy Policy', '/privacy-policy/'),
+  'terms-and-conditions/index.html': policy('Terms &amp; Conditions', '/terms-and-conditions/'),
+  'cancellation-refund-policy/index.html': policy('Cancellation &amp; Refund Policy', '/cancellation-refund-policy/'),
+  '404.html': page('/404', 'Page Not Found — Roamance', 'This page could not be found.', 'Your Holidays, Closer to Heart.', notfound, noindex=True),
+}
+for rel, html in PAGES.items():
+    p = os.path.join(ROOT, rel); os.makedirs(os.path.dirname(p) or ROOT, exist_ok=True)
+    open(p, 'w', encoding='utf-8').write(html)
+    print('wrote', rel, len(html))
