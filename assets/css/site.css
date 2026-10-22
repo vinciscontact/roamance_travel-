@@ -163,8 +163,8 @@ body::after{content:"";position:fixed;inset:0;z-index:1200;pointer-events:none;o
 .drift span:nth-child(2){align-self:flex-end}
 
 /* ---------- reasons ---------- */
-.grow-gap{height:50vh}
-.grow-title{display:grid;place-items:center;text-align:center;min-height:56vh;padding-inline:16px}
+.grow-gap{height:14vh}
+.grow-title{display:grid;place-items:center;text-align:center;padding:clamp(64px,10vh,120px) 16px 0}
 .reasons{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,2.4vw,40px)}
 .reason{border-top:2px solid var(--sd-accent);padding-top:20px}
 .reason .idx{font-family:"Jost",sans-serif;font-size:clamp(46px,5vw,84px);line-height:1;display:block;margin-bottom:22px}
