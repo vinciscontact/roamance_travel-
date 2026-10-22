@@ -62,10 +62,12 @@ body::after{content:"";position:fixed;inset:0;z-index:1200;pointer-events:none;o
 
 /* ---------- preloader ---------- */
 .pre{background:var(--sd-paper);color:var(--sd-ink)}
+.pre>div{display:flex;flex-direction:column;align-items:center;text-align:center;width:min(92vw,760px);padding-inline:16px}
+.pre .logo{align-items:center}
 .pre .logo b{font-size:clamp(48px,7vw,104px)}
-.pre .logo small{font-size:clamp(10px,.9vw,14px);margin-top:12px}
-.pre-pct{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-size:.85em;letter-spacing:.2em}
-.pre-line{margin-top:22px}
+.pre .logo small{font-size:clamp(10px,.9vw,14px);margin-top:12px;padding-left:.32em}
+.pre-pct{position:absolute;bottom:32px;left:0;right:0;text-align:center;font-size:.85em;letter-spacing:.2em;padding-left:.2em}
+.pre-line{margin:28px auto 0;max-width:46ch;text-wrap:balance;letter-spacing:.18em;padding-left:.18em}
 
 /* ---------- hero (home) ---------- */
 .hero-area{height:220vh}

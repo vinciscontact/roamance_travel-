@@ -164,7 +164,14 @@ def footer():
 BASE_SCRIPT = ('<script>document.write(\'<base href="\'+(location.hostname.endsWith(".github.io")'
                '?"/"+location.pathname.split("/")[1]+"/":"/")+\'">\')</script>')
 
+import hashlib
+def _ver(rel):
+    with open(os.path.join(ROOT, rel), 'rb') as f: return hashlib.md5(f.read()).hexdigest()[:8]
+ASSETS = ['assets/css/sd-base.css', 'assets/css/site.css', 'assets/js/config.js', 'assets/js/sd-engine.js', 'assets/js/site.js']
+
 def relativise(html, path):
+    for rel in ASSETS:   # cache-busting: visitors get fresh CSS/JS whenever a file changes
+        html = html.replace(f'"/{rel}"', f'"/{rel}?v={_ver(rel)}"')
     depth = path.strip('/').count('/') + 1 if path.strip('/') and path != '/404' else 0
     prefix = '../' * depth if depth else './'
     html = re.sub(r'(href|src|content)="/(?!/)', lambda m: f'{m.group(1)}="{prefix}', html)
