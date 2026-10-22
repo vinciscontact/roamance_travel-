@@ -6,3 +6,7 @@
 .DS_Store
 Thumbs.db
 __pycache__/
+
+# Home-only Hostinger build (published to the hostinger-home branch)
+dist-home/
+dist-home.zip
