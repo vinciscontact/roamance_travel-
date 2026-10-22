@@ -1,6 +1,6 @@
 import os, re, sys
 ROOT = sys.argv[1]
-PAPER, CREAM, NAVY = '#fffcf6', '#fbf3e2', '#1d2b3a'
+PAPER, CREAM, CHARCOAL = '#fffdf2', '#fbde22', '#2e3231'
 INK = CREAM   # default torn-edge colour = the cream band it leads into
 
 NAV = [('/', 'Home'), ('/about-us/', 'About Us'), ('/tour-packages/', 'Tour Packages'), ('/gallery/', 'Gallery'), ('/contact-us/', 'Contact Us')]
@@ -67,14 +67,18 @@ def head(title, desc, path, noindex=False):
 <meta property="og:image" content="/assets/img/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <!-- Add <link rel="canonical" href="https://YOUR-DOMAIN{path}"> once the production domain is confirmed -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231d2b3a'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5b50f'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%232e3231'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial,sans-serif' font-size='38' fill='%23fbde22'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/sd-base.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>'''
+
+LOGO = ('<svg class="lw-bird" data-flip aria-hidden="true"><use href="/assets/img/logo-sprite.svg#bird"/></svg>'
+        '<span class="lw-text" data-flip><svg class="lw-word" aria-hidden="true"><use href="/assets/img/logo-sprite.svg#word"/></svg>'
+        '<svg class="lw-tag" aria-hidden="true"><use href="/assets/img/logo-sprite.svg#tag"/></svg></span>')
 
 def chrome(path, pre_line):
     links = []
@@ -84,9 +88,9 @@ def chrome(path, pre_line):
     menu = ''.join(f'<a href="{h}" data-sd-menu-h>{l}</a>' for h, l in NAV)
     return f'''
 <!-- PRELOADER (first visit only) -->
-<div class="pre" data-sd-preloader>
+<div class="pre theme-dark" data-sd-preloader>
   <div>
-    <a href="/" class="logo" data-sd-preloader-logo aria-label="Roamance Trips and Holidays — home"><b>Roamance</b><small>Trips &amp; Holidays</small></a>
+    <a href="/" class="logo" data-sd-preloader-logo aria-label="Roamance Trips and Holidays — home">{LOGO}</a>
     <p class="eyebrow pre-line" data-sd-preloader-p>{pre_line}</p>
   </div>
   <span class="pre-pct" data-sd-preloader-percent>0%</span>
@@ -105,15 +109,16 @@ def chrome(path, pre_line):
 </header>
 '''
 
-def footer():
+def footer(extra_js=''):
     links = ''.join(f'<li><a href="{h}">{l}</a></li>' for h, l in NAV)
     menu = ''.join(f'<a href="{h}" data-sd-menu-h>{l}</a>' for h, l in NAV)
     return f'''
-{torn('bottom', 27, NAVY)}
-<footer class="foot theme-navy" data-sd-footer-zoom data-sd-bg="navy">
+{torn('bottom', 27, CHARCOAL)}
+<footer class="foot theme-charcoal" data-sd-footer-zoom data-sd-bg="charcoal">
   <div class="sd-sticky">
     <div class="foot-bg" data-sd-footer-bg></div>
     <div class="foot-content" data-sd-footer-content>
+      <div class="foot-logo" aria-hidden="true"><svg class="lw-bird"><use href="/assets/img/logo-sprite.svg#bird"/></svg><svg class="lw-word"><use href="/assets/img/logo-sprite.svg#word"/></svg><svg class="lw-tag"><use href="/assets/img/logo-sprite.svg#tag"/></svg></div>
       <h2>Your Holidays, Closer to Heart.</h2>
       <div class="btn-row"><a href="/contact-us/" class="btn" data-sd-magnetic="30"><span data-sd-magnetic-inner>Plan My Holiday</span></a><a href="/tour-packages/" class="btn ghost">Explore Tour Packages</a></div>
       <div class="foot-cols">
@@ -131,7 +136,7 @@ def footer():
   </div>
 </footer>
 
-<div data-sd-menu class="theme-navy" role="dialog" aria-label="Menu">
+<div data-sd-menu class="theme-charcoal" role="dialog" aria-label="Menu">
   <div class="menu-inner">
     <nav data-sd-dim-group aria-label="Menu">{menu}</nav>
     <div class="menu-meta" data-sd-menu-ctn>
@@ -154,7 +159,7 @@ def footer():
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.15/dist/lenis.min.js"></script>
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/sd-engine.js"></script>
-<script src="/assets/js/site.js"></script>
+{extra_js}<script src="/assets/js/site.js"></script>
 </body>
 </html>
 '''
@@ -167,11 +172,11 @@ BASE_SCRIPT = ('<script>document.write(\'<base href="\'+(location.hostname.endsW
 import hashlib
 def _ver(rel):
     with open(os.path.join(ROOT, rel), 'rb') as f: return hashlib.md5(f.read()).hexdigest()[:8]
-ASSETS = ['assets/css/sd-base.css', 'assets/css/site.css', 'assets/js/config.js', 'assets/js/sd-engine.js', 'assets/js/site.js']
+ASSETS = ['assets/css/sd-base.css', 'assets/css/site.css', 'assets/js/config.js', 'assets/js/sd-engine.js', 'assets/js/site.js', 'assets/js/world-dots.js', 'assets/js/hero.js', 'assets/img/logo-sprite.svg']
 
 def relativise(html, path):
     for rel in ASSETS:   # cache-busting: visitors get fresh CSS/JS whenever a file changes
-        html = html.replace(f'"/{rel}"', f'"/{rel}?v={_ver(rel)}"')
+        html = html.replace(f'"/{rel}"', f'"/{rel}?v={_ver(rel)}"').replace(f'"/{rel}#', f'"/{rel}?v={_ver(rel)}#')
     depth = path.strip('/').count('/') + 1 if path.strip('/') and path != '/404' else 0
     prefix = '../' * depth if depth else './'
     html = re.sub(r'(href|src|content)="/(?!/)', lambda m: f'{m.group(1)}="{prefix}', html)
@@ -180,7 +185,8 @@ def relativise(html, path):
     return html
 
 def page(path, title, desc, pre_line, body, noindex=False):
-    html = head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer()
+    extra = ('<script src="/assets/js/world-dots.js"></script>\n<script src="/assets/js/hero.js"></script>\n') if path == '/' else ''
+    html = head(title, desc, path, noindex) + chrome(path, pre_line) + '\n<main id="main">\n' + body + '\n</main>\n' + footer(extra)
     return relativise(html, path)
 
 def cta_band(h, p, btn, href='/contact-us/', bg='light'):
@@ -201,7 +207,7 @@ CATS = [
 ]
 cards = []
 for i, (name, h, p, cta, href, im, art, alt) in enumerate(CATS, 1):
-    cards.append(f'''        <li class="card theme-navy" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
+    cards.append(f'''        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           {img(im, art, alt, 'loading="eager"')}
           <div class="card-top"><span class="num eyebrow">0{i}</span>{plus()}</div>
           <h3 data-sd-expand-name>{name}</h3>
@@ -231,10 +237,14 @@ REASONS = [
 ]
 reasons = '\n'.join(f'''      <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>{h}</h3><p>{p}</p></div>''' for h, p in REASONS)
 
-home = f'''<section class="hero-area" data-sd-hero-out data-sd-bg="light">
+home = f'''<section class="hero-area theme-dark" data-sd-hero-out data-sd-bg="dark">
   <div class="hero-sticky">
-    <div class="hero-card" data-sd-hero-card>
-      <div class="hero-media" data-sd-intro-media><canvas class="sd-linocut" id="hero-canvas" role="img" aria-label="Engraved illustration of a houseboat on palm-lined Kerala backwaters"></canvas></div>
+    <div class="hero-card" data-sd-hero-card data-hero-map>
+      <div class="hero-media" data-sd-intro-media><canvas id="hero-map" aria-hidden="true"></canvas></div>
+      <div class="eagle" data-eagle aria-hidden="true">
+        <svg viewBox="612 8 342 455"><path class="eagle-tail" data-eagle-tail d="M786.0,453.8 768.2,428.0 762.6,421.0 760.0,416.0 709.7,343.0 709.3,341.0 714.0,337.9 799.0,292.6 804.0,290.8 804.5,295.0 803.5,296.0 803.5,304.0 802.5,305.0 802.5,314.0 801.5,315.0 801.5,323.0 800.5,324.0 800.5,332.0 799.5,333.0 799.5,341.0 798.5,342.0 798.5,351.0 797.5,352.0 797.5,360.0 796.5,361.0 796.5,369.0 795.5,370.0 795.5,378.0 794.5,379.0 794.5,388.0 793.5,389.0 793.5,397.0 792.5,398.0 792.5,406.0 791.5,407.0 791.5,415.0 790.5,416.0 790.5,425.0 789.5,426.0 789.5,434.0 788.5,435.0 788.5,443.0 787.5,444.0 787.4,452.0 786.0,453.8Z"/><path class="eagle-wing" data-eagle-wing d="M836.0,337.1 834.0,337.7 833.4,336.0 833.4,324.0 832.6,314.0 830.2,297.0 828.5,290.0 828.5,286.0 826.0,274.0 820.5,252.0 813.3,229.0 805.1,208.0 796.5,189.0 785.3,168.0 772.4,147.0 757.3,126.0 743.3,109.0 727.5,92.0 708.0,73.8 690.0,59.0 668.0,43.3 648.0,30.7 619.1,15.0 617.4,14.0 618.0,13.2 625.0,14.7 651.0,22.9 691.0,38.6 723.0,53.9 757.0,73.9 770.0,82.7 787.0,95.6 808.8,115.0 828.0,136.1 837.1,148.0 848.8,166.0 850.0,166.7 865.0,154.9 878.0,147.6 890.0,143.8 902.0,143.0 908.0,143.7 915.0,145.9 924.9,151.0 936.0,160.4 946.2,173.0 948.0,177.0 935.0,175.0 926.0,175.4 920.0,177.7 915.5,182.0 893.1,234.0 872.5,277.0 853.0,312.7 845.1,325.0 836.0,337.1ZM790.0,457.7 789.0,457.7 787.0,455.3 786.6,453.0 787.5,452.0 787.5,444.0 788.5,443.0 788.5,435.0 789.5,434.0 789.5,426.0 790.5,425.0 790.5,416.0 791.5,415.0 791.5,407.0 792.5,406.0 792.5,398.0 793.5,397.0 793.5,389.0 794.5,388.0 794.5,379.0 795.5,378.0 795.5,370.0 796.5,369.0 796.5,361.0 797.5,360.0 797.5,352.0 798.5,351.0 798.5,342.0 799.5,341.0 799.5,333.0 800.5,332.0 800.5,324.0 801.5,323.0 801.5,315.0 802.5,314.0 802.5,305.0 803.5,304.0 803.5,296.0 804.5,295.0 805.0,290.2 816.0,284.6 817.5,286.0 822.2,306.0 823.8,321.0 825.2,350.0 824.3,365.0 805.6,416.0 804.5,421.0 801.6,427.0 798.6,437.0 794.6,446.0 793.1,452.0 790.0,457.7Z"/></svg>
+      </div>
+      <p class="hero-hint eyebrow" aria-hidden="true"><span class="hint-desk">Move your cursor to guide the eagle</span><span class="hint-touch">Tap anywhere to guide the eagle</span></p>
     </div>
     <div class="hero-copy" data-sd-hero-stage>
       <div data-sd-hero-copy>
@@ -248,6 +258,7 @@ home = f'''<section class="hero-area" data-sd-hero-out data-sd-bg="light">
     </div>
   </div>
 </section>
+{torn('top', 2, CREAM)}
 
 <section class="pad wrap" data-sd-bg="light">
   <p class="eyebrow center" style="margin-bottom:24px" data-sd-reveal="lines">More Than a Journey. A Family That Travels With You.</p>
@@ -299,14 +310,14 @@ home = f'''<section class="hero-area" data-sd-hero-out data-sd-bg="light">
   </div>
 </section>
 
-{torn('bottom', 17, NAVY)}
-<section class="pad-s theme-navy" data-sd-bg="navy" aria-label="Our philosophy">
+{torn('bottom', 17, CHARCOAL)}
+<section class="pad-s theme-charcoal" data-sd-bg="charcoal" aria-label="Our philosophy">
   <div class="marquee" data-sd-marquee="26" aria-hidden="true">
     <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
     <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
   </div>
 </section>
-{torn('top', 21, NAVY)}
+{torn('top', 21, CHARCOAL)}
 
 <section class="pad wrap" data-sd-bg="light">
   <div class="grid2 top">

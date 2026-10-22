@@ -327,8 +327,8 @@
     const targets = $$('[data-sd-theme-target]'); if (!targets.length) return;
     $$('[data-sd-bg]', root).forEach((sec) => {
       if (getComputedStyle(sec).display === 'none') return;
-      const add = 'theme-' + (sec.getAttribute('data-sd-bg') || 'light');   // light | dark | navy
-      const all = ['theme-light', 'theme-dark', 'theme-navy'];
+      const add = 'theme-' + (sec.getAttribute('data-sd-bg') || 'light');   // light | dark (yellow) | charcoal
+      const all = ['theme-light', 'theme-dark', 'theme-charcoal'];
       targets.forEach((t) => {
         const line = () => { const r = t.getBoundingClientRect(); return r.top + r.height / 2; };
         const swap = () => { t.classList.remove(...all); t.classList.add(add); };
@@ -715,7 +715,7 @@
     const header = $('[data-sd-header]'); let open = false;
     gsap.set(menu, { display: 'none' });
     const toggle = (want) => { open = want ?? !open;
-      header && header.classList.toggle('theme-navy', open); btn.classList.toggle('is-open', open);
+      header && header.classList.toggle('theme-charcoal', open); btn.classList.toggle('is-open', open);
       if (open) {
         gsap.fromTo(menu, { display: 'block', '--sd-mask-y': '200%', opacity: 1 }, { '--sd-mask-y': '0%', duration: 1.5 * T.L, ease: E.out, overwrite: true });
         const tl = gsap.timeline({ defaults: { duration: T.S, ease: E.inOut } });
@@ -822,7 +822,8 @@
             transition('out');
             const tl = gsap.timeline({ onComplete: () => { done(); resolve(); } });
             if (media) tl.fromTo(media, { scale: 1.5 }, { scale: 1, duration: 2 * T.L, ease: E.out }, 0);
-            if (logo && slot && Flip) { const state = Flip.getState(logo); slot.appendChild(logo); tl.add(Flip.from(state, { duration: 1.5 * T.L, ease: E.inOut }), 0); }
+            if (logo && slot && Flip) { const parts = [logo, ...logo.querySelectorAll('[data-flip]')];   // parts that re-layout (stacked → row) morph too
+              const state = Flip.getState(parts); slot.appendChild(logo); tl.add(Flip.from(state, { targets: parts, nested: true, duration: 1.5 * T.L, ease: E.inOut }), 0); }
             tl.add(revealIntro, T.L);
           });
         });

@@ -2,23 +2,29 @@
 
 /* 1. Two-colour theme. Sections flip by SWAPPING the vars, not by restyling. */
 :root, .theme-light {
-  --sd-paper: #fffcf6;          /* warm white (bg in light theme)  */
-  --sd-ink:   #1d2b3a;          /* deep navy  (text in light theme) */
-  --sd-accent: #f5b50f;         /* marigold — buttons, icons, small highlights only (never body text) */
-  --sd-on-accent: #1d2b3a;
+  --sd-paper: #fffdf2;          /* warm white (bg in light theme)   */
+  --sd-ink:   #3d4341;          /* brand charcoal (text)            */
+  --sd-accent: #fbde22;         /* brand yellow — buttons, icons, highlights (never body text on white) */
+  --sd-on-accent: #2e3231;
+  --sd-dot: #e3c51e;            /* world-map dots */
   --sd-ink-50: color-mix(in srgb, var(--sd-ink) 50%, transparent);
   --sd-ink-10: color-mix(in srgb, var(--sd-ink) 10%, transparent);
   --sd-radius: 1.5rem;
   color: var(--sd-ink);
 }
-.theme-dark {                   /* "band" sections: soft cream, same navy ink */
-  --sd-paper: #fbf3e2;
-  --sd-ink:   #1d2b3a;
+.theme-dark {                   /* brand-yellow bands (hero, holiday cards, closing CTA) */
+  --sd-paper: #fbde22;
+  --sd-ink:   #2e3231;
+  --sd-accent: #2e3231;
+  --sd-on-accent: #fbde22;
+  --sd-dot: #c5b13e;
   color: var(--sd-ink);
 }
-.theme-navy {                   /* footer, menu, marquee: navy with cream ink */
-  --sd-paper: #1d2b3a;
-  --sd-ink:   #fbf3e2;
+.theme-charcoal {               /* footer, menu, marquee: charcoal with warm-white ink, yellow accent */
+  --sd-paper: #2e3231;
+  --sd-ink:   #f6f2e2;
+  --sd-accent: #fbde22;
+  --sd-on-accent: #2e3231;
   color: var(--sd-ink);
 }
 [data-sd-bg] { background: var(--sd-paper); color: var(--sd-ink); }

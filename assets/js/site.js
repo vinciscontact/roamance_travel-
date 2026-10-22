@@ -207,60 +207,7 @@
     });
   }
 
-  /* ---------------------------------------------------------------- *
-   * 5. Home hero — engraved Kerala backwater, drawn procedurally (black = transparent)
-   * ---------------------------------------------------------------- */
-  function heroLayers() {
-    const sky = document.createElement('canvas'); sky.width = 800; sky.height = 600; let x = sky.getContext('2d');
-    let g = x.createLinearGradient(0, 0, 0, 600); g.addColorStop(0, 'rgb(255,255,255)'); g.addColorStop(.6, 'rgb(255,255,255)'); g.addColorStop(1, 'rgb(236,236,236)');
-    x.fillStyle = g; x.fillRect(0, 0, 800, 600);
-    x.fillStyle = 'rgb(200,200,200)'; x.beginPath(); x.arc(640, 430, 50, 0, 7); x.fill();
-
-    const clouds = document.createElement('canvas'); clouds.width = 1200; clouds.height = 420; x = clouds.getContext('2d'); let r = rng(11);
-    x.fillStyle = '#000'; x.fillRect(0, 0, 1200, 420);
-    [[260, 250, 1], [900, 230, .8]].forEach(([bx, by, k]) => { for (let i = 0; i < 7; i++) { const cx = bx + (i - 3) * 55 * k + r() * 20, cy = by + Math.abs(i - 3) * 14 + r() * 10, rad = (90 - Math.abs(i - 3) * 16) * k;
-      g = x.createRadialGradient(cx, cy - rad * .3, 0, cx, cy, rad); g.addColorStop(0, 'rgb(236,236,236)'); g.addColorStop(.9, 'rgb(196,196,196)'); g.addColorStop(.91, 'rgb(0,0,0)');
-      x.fillStyle = g; x.beginPath(); x.arc(cx, cy, rad, 0, 7); x.fill(); } x.fillStyle = 'rgb(0,0,0)'; x.fillRect(0, by + 60 * k, 1200, 420); });
-
-    const hills = document.createElement('canvas'); hills.width = 1600; hills.height = 500; x = hills.getContext('2d'); r = rng(5);
-    x.fillStyle = '#000'; x.fillRect(0, 0, 1600, 500);
-    for (let L = 0; L < 3; L++) { const base = 220 + L * 90, amp = 120 - L * 30, v = 190 - L * 40;
-      x.fillStyle = `rgb(${v},${v},${v})`; x.beginPath(); x.moveTo(0, 500);
-      for (let i = 0; i <= 70; i++) x.lineTo(i / 70 * 1600, base - Math.abs(Math.sin(i * .17 + L * 2.1)) * amp - r() * 16);
-      x.lineTo(1600, 500); x.fill(); }
-
-    const shore = document.createElement('canvas'); shore.width = 1600; shore.height = 640; x = shore.getContext('2d'); r = rng(9);
-    x.fillStyle = '#000'; x.fillRect(0, 0, 1600, 640);
-    g = x.createLinearGradient(0, 300, 0, 640); g.addColorStop(0, 'rgb(215,215,215)'); g.addColorStop(1, 'rgb(150,150,150)');
-    x.fillStyle = g; x.fillRect(0, 300, 1600, 340);
-    x.strokeStyle = 'rgb(245,245,245)'; x.lineWidth = 3;
-    for (let y = 320; y < 640; y += 10 + (y - 300) * .05) { x.beginPath(); const o = r() * 1200; x.moveTo(o, y); x.lineTo(o + 120 + r() * 300, y); x.stroke(); }
-    x.fillStyle = 'rgb(70,70,70)'; x.beginPath(); x.moveTo(0, 300); x.lineTo(1600, 300); x.lineTo(1600, 318); x.quadraticCurveTo(800, 330, 0, 316); x.fill();
-    const palmCol = 'rgb(55,55,55)';
-    [[90, 300, 280, .25], [210, 305, 230, -.1], [330, 300, 300, .18], [1250, 300, 260, -.2], [1390, 305, 310, .12], [1520, 300, 240, -.25]]
-      .forEach(([px, b, hh, lean]) => palm(x, px, b, hh, lean, palmCol));
-    boat(x, 640, 400, 380, 'rgb(45,45,45)', 'rgb(230,230,230)');
-    return [
-      { type: 'canvas', el: sky, config: { blackPoint: 0, whitePoint: 255, threshold: 242, xSquares: 200, ySquares: 120 } },
-      { type: 'canvas', el: clouds, config: { x: '40%', y: '42%', width: '60%', height: '20%', threshold: 250, xSquares: 200, ySquares: 70 } },
-      { type: 'canvas', el: hills, config: { y: '57%', height: '21%', blackPoint: 20, whitePoint: 210, xSquares: 220, ySquares: 80 } },
-      { type: 'canvas', el: shore, config: { y: '63%', height: '37%', blackPoint: 15, whitePoint: 220, xSquares: 220, ySquares: 130 } },
-    ];
-  }
-
-  function onScenes() {
-    const canvas = document.getElementById('hero-canvas'); if (!canvas || !window.SD) return;
-    const mobile = innerWidth < 992;
-    const layers = heroLayers();
-    if (mobile) { layers[2].config.width = layers[3].config.width = '180%'; layers[2].config.x = layers[3].config.x = '-40%'; layers.forEach((l) => { l.config.xSquares *= .55; });
-      Object.assign(layers[1].config, { y: '4%', height: '22%' }); Object.assign(layers[2].config, { y: '18%', height: '30%' }); Object.assign(layers[3].config, { y: '30%', height: '70%' }); }
-    const scene = SD.scenes.add('hero', SD.linocut(canvas, layers, { fps: mobile ? 30 : 60 }));
-    if (!scene || reduced) return;
-    gsap.to(layers[1].config, { x: '18%', duration: 14, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    gsap.timeline({ scrollTrigger: { trigger: '.hero-area', start: 'top top', end: 'bottom top', scrub: true } })
-      .to(layers[2].config, { blackPoint: 45, whitePoint: 180, ease: 'none' }, 0)
-      .to(layers[3].config, { blackPoint: 40, ease: 'none' }, 0);
-  }
+  /* 5. Home hero lives in hero.js (dotted map + eagle). */
 
   /* ---------------------------------------------------------------- *
    * 6. Boot + smooth anchor scrolling (incl. arriving at /tour-packages/#family)
@@ -274,7 +221,11 @@
     if (goTo(url.hash)) { e.preventDefault(); history.replaceState(null, '', url.hash); }
   });
 
-  const ready = SD.init({ onScenes });
+  // Header starts in the theme of whatever section sits under it (the engine only flips on scroll)
+  const hdr = $('[data-sd-header]'), first = $('main [data-sd-bg]');
+  if (hdr && first && !hdr.className.includes('theme-')) hdr.classList.add('theme-' + first.dataset.sdBg);
+
+  const ready = SD.init();
   Promise.resolve(ready).then(() => {
     if (location.hash) setTimeout(() => { ScrollTrigger.refresh(); goTo(location.hash); }, 60);
   });

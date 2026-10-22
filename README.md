@@ -1,6 +1,6 @@
 # Roamance Trips and Holidays — website
 
-A static site with no build step. Motion uses the Son Daven system (GSAP 3.13, ScrollTrigger, SplitText and Lenis), with a turmeric and backwater-green two-colour palette.
+A static site with no build step. Motion uses the Son Daven system (GSAP 3.13, ScrollTrigger, SplitText and Lenis), in the Roamance brand colours: logo yellow `#fbde22`, charcoal `#3d4341` and warm white. The home hero is an interactive dotted world map with the logo eagle (`assets/js/hero.js`).
 
 ## Preview locally
 ```bash
@@ -13,7 +13,8 @@ Then open http://localhost:5173. All links are relative, so the site works at a 
 |---|---|
 | Phone, WhatsApp, email, address, city, hours, map, social links, form endpoint | `assets/js/config.js`. Empty values are hidden on the site automatically. |
 | Photos | `assets/img/`. See **IMAGE-PROMPTS.md** for the filenames and a ready-made prompt. |
-| Colours | `assets/css/sd-base.css` (`--sd-paper` / `--sd-ink`) |
+| Colours | `assets/css/sd-base.css` (`--sd-paper`, `--sd-ink`, `--sd-accent`) |
+| Logo | `assets/img/logo-sprite.svg` (vector symbols `#bird`, `#word`, `#tag`, coloured by CSS) and `assets/img/logo.svg` (full logo) |
 | Page copy | Edit the `index.html` files directly, **or** edit `tools/build_pages.py` and run `python tools/build_pages.py .` (this regenerates all pages and overwrites direct edits). |
 
 ## Pages
