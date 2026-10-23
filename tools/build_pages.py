@@ -41,7 +41,7 @@ def faq_section(keys, title='Questions, Answered', bg='light'):
   <div class="faq">
     <div data-sd-reveal-group>
       <p class="eyebrow" data-sd-reveal="lines">Frequently asked</p>
-      <h2 data-sd-reveal="words" style="margin-top:16px">{title}</h2>
+      <h2 class="h2-s" data-sd-reveal="words" style="margin-top:14px">{title}</h2>
     </div>
     <div>
 {faq([FAQ[k] for k in keys])}
@@ -114,25 +114,18 @@ def footer(extra_js=''):
     menu = ''.join(f'<a href="{h}" data-sd-menu-h>{l}</a>' for h, l in NAV)
     return f'''
 {torn('bottom', 27, CHARCOAL)}
-<footer class="foot theme-charcoal" data-sd-footer-zoom data-sd-bg="charcoal">
-  <div class="sd-sticky">
-    <div class="foot-bg" data-sd-footer-bg></div>
-    <div class="foot-content" data-sd-footer-content>
-      <div class="foot-logo" aria-hidden="true"><svg class="lw-bird"><use href="/assets/img/logo-sprite.svg#bird"/></svg><svg class="lw-word"><use href="/assets/img/logo-sprite.svg#word"/></svg><svg class="lw-tag"><use href="/assets/img/logo-sprite.svg#tag"/></svg></div>
-      <h2>Your Holidays, Closer to Heart.</h2>
-      <div class="btn-row"><a href="/contact-us/" class="btn" data-sd-magnetic="30"><span data-sd-magnetic-inner>Plan My Holiday</span></a><a href="/tour-packages/" class="btn ghost">Explore Tour Packages</a></div>
-      <div class="foot-cols">
-        <div>
-          <h4>Roamance Trips and Holidays</h4>
-          <p>Thoughtfully planned domestic and international holidays, with personal care at every step.</p>
-          <p style="margin-top:14px" data-biz-wrap="phone email"><a data-biz-wrap="phone" data-biz-href="phone" data-biz="phone"></a><span data-biz-wrap="phone"> &nbsp;·&nbsp; </span><a data-biz-wrap="email" data-biz-href="email" data-biz="email"></a></p>
-          <p style="margin-top:6px" data-biz-wrap="address" data-biz="fullAddress"></p>
-        </div>
-        <div><h4>Explore</h4><ul data-sd-dim-group>{links}</ul></div>
-        <div><h4>Policies</h4><ul data-sd-dim-group><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms-and-conditions/">Terms &amp; Conditions</a></li><li><a href="/cancellation-refund-policy/">Cancellation &amp; Refund Policy</a></li></ul></div>
+<footer class="foot theme-charcoal" data-sd-bg="charcoal">
+  <div class="foot-content wrap">
+    <div class="foot-cols">
+      <div>
+        <div class="foot-logo" aria-hidden="true"><svg class="lw-bird"><use href="/assets/img/logo-sprite.svg#bird"/></svg><svg class="lw-word"><use href="/assets/img/logo-sprite.svg#word"/></svg></div>
+        <p data-biz-wrap="phone email"><a data-biz-wrap="phone" data-biz-href="phone" data-biz="phone"></a><span data-biz-wrap="phone"> &nbsp;·&nbsp; </span><a data-biz-wrap="email" data-biz-href="email" data-biz="email"></a></p>
+        <p data-biz-wrap="address" data-biz="fullAddress"></p>
       </div>
-      <div class="foot-base"><span>© <span data-year></span> Roamance Trips and Holidays</span><span>Designed by <a class="credit-link" href="https://vincisglobal.com" target="_blank" rel="noopener" data-sd-no-transition>TheVincis</a></span></div>
+      <div><h4>Explore</h4><ul data-sd-dim-group>{links}</ul></div>
+      <div><h4>Policies</h4><ul data-sd-dim-group><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms-and-conditions/">Terms &amp; Conditions</a></li><li><a href="/cancellation-refund-policy/">Cancellation &amp; Refund Policy</a></li></ul></div>
     </div>
+    <div class="foot-base"><span>© <span data-year></span> Roamance Trips and Holidays</span><span>Designed by <a class="credit-link" href="https://vincisglobal.com" target="_blank" rel="noopener" data-sd-no-transition>TheVincis</a></span></div>
   </div>
 </footer>
 
@@ -140,7 +133,6 @@ def footer(extra_js=''):
   <div class="menu-inner">
     <nav data-sd-dim-group aria-label="Menu">{menu}</nav>
     <div class="menu-meta" data-sd-menu-ctn>
-      <span>Your Holidays, Closer to Heart.</span>
       <a data-biz-wrap="phone" data-biz-href="phone" data-biz="phone"></a>
       <a data-biz-wrap="email" data-biz-href="email" data-biz="email"></a>
     </div>
@@ -207,15 +199,15 @@ def cta_band(h, p, btn, href='/contact-us/', bg='light'):
 
 # ------------------------------------------------------------------ HOME
 CATS = [
-  ('Domestic Holidays', 'Discover the beauty of India', 'Discover the beauty of India through relaxing escapes, cultural experiences, scenic hill stations and memorable family trips.', 'Explore India', '/tour-packages/#domestic', 'cat-domestic', 'hills', 'Traveller standing on a tea plantation hill at sunrise'),
-  ('International Holidays', 'New cultures, remarkable landscapes', 'Experience new cultures, remarkable landscapes and dream destinations with an international holiday planned around your interests.', 'Explore the World', '/tour-packages/#international', 'cat-international', 'alps', 'Lakeside alpine village with a church spire beneath misty mountains'),
-  ('Honeymoon &amp; Romantic Getaways', 'Time that brings you closer', 'Celebrate your time together with a holiday that brings you closer, from peaceful retreats to exciting new discoveries.', 'Plan Your Romantic Escape', '/tour-packages/#honeymoon', 'cat-honeymoon', 'couple', 'Couple walking hand in hand along the shore at sunset'),
-  ('Family Holidays', 'Laughter and quality time', 'Make room for laughter, shared discoveries and quality time with a holiday designed around your family.', 'Plan a Family Trip', '/tour-packages/#family', 'cat-family', 'family', 'Family watching the waves together on a beach'),
-  ('Personalised Holidays', 'A holiday that feels right', 'Tell us your destination, travel dates, preferences and budget. Let us help shape a holiday that feels right for you.', 'Create My Itinerary', '/contact-us/', 'cat-personalised', 'plan', 'Hands marking a route on a city map beside glasses and pencils'),
+  ('Domestic Holidays', 'India, up close', 'Hill stations, heritage towns, quiet beaches and backwaters, at a pace that suits you.', 'Enquire', '/contact-us/', 'cat-domestic', 'hills', 'Traveller standing on a tea plantation hill at sunrise'),
+  ('International Holidays', 'Beyond India', 'New cultures and landscapes, planned around your interests and the time you have.', 'Enquire', '/contact-us/', 'cat-international', 'alps', 'Lakeside alpine village with a church spire beneath misty mountains'),
+  ('Honeymoon &amp; Romantic Getaways', 'Just the two of you', 'Peaceful retreats or new discoveries, to begin your next chapter together.', 'Enquire', '/contact-us/', 'cat-honeymoon', 'couple', 'Couple walking hand in hand along the shore at sunset'),
+  ('Family Holidays', 'Everyone, together', 'Plans that work for every age in the group, with room for laughter and rest.', 'Enquire', '/contact-us/', 'cat-family', 'family', 'Family watching the waves together on a beach'),
+  ('Personalised Holidays', 'Built from scratch', 'Share your destination, dates and budget, and we will shape the itinerary with you.', 'Enquire', '/contact-us/', 'cat-personalised', 'plan', 'Hands marking a route on a city map beside glasses and pencils'),
 ]
 cards = []
 for i, (name, h, p, cta, href, im, art, alt) in enumerate(CATS, 1):
-    cards.append(f'''        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
+    cards.append(f'''        <li class="card theme-charcoal" data-sd-expand tabindex="0">
           {img(im, art, alt, 'loading="eager"')}
           <div class="card-top"><span class="num eyebrow">0{i}</span>{plus()}</div>
           <h3 data-sd-expand-name>{name}</h3>
@@ -245,112 +237,73 @@ REASONS = [
 ]
 reasons = '\n'.join(f'''      <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>{h}</h3><p>{p}</p></div>''' for h, p in REASONS)
 
-home = f'''<section class="hero-area theme-dark" data-sd-hero-out data-sd-bg="dark">
+home = f'''<section class="hero-area theme-dark" data-sd-bg="dark">
   <div class="hero-sticky">
-    <div class="hero-card" data-sd-hero-card data-hero-map>
+    <div class="hero-card" data-hero-map>
       <div class="hero-media" data-sd-intro-media><canvas id="hero-map" aria-hidden="true"></canvas></div>
       <div class="eagle" data-eagle aria-hidden="true">
         <svg viewBox="612 8 342 455"><path class="eagle-tail" data-eagle-tail d="M786.0,453.8 768.2,428.0 762.6,421.0 760.0,416.0 709.7,343.0 709.3,341.0 714.0,337.9 799.0,292.6 804.0,290.8 804.5,295.0 803.5,296.0 803.5,304.0 802.5,305.0 802.5,314.0 801.5,315.0 801.5,323.0 800.5,324.0 800.5,332.0 799.5,333.0 799.5,341.0 798.5,342.0 798.5,351.0 797.5,352.0 797.5,360.0 796.5,361.0 796.5,369.0 795.5,370.0 795.5,378.0 794.5,379.0 794.5,388.0 793.5,389.0 793.5,397.0 792.5,398.0 792.5,406.0 791.5,407.0 791.5,415.0 790.5,416.0 790.5,425.0 789.5,426.0 789.5,434.0 788.5,435.0 788.5,443.0 787.5,444.0 787.4,452.0 786.0,453.8Z"/><path class="eagle-wing" data-eagle-wing d="M836.0,337.1 834.0,337.7 833.4,336.0 833.4,324.0 832.6,314.0 830.2,297.0 828.5,290.0 828.5,286.0 826.0,274.0 820.5,252.0 813.3,229.0 805.1,208.0 796.5,189.0 785.3,168.0 772.4,147.0 757.3,126.0 743.3,109.0 727.5,92.0 708.0,73.8 690.0,59.0 668.0,43.3 648.0,30.7 619.1,15.0 617.4,14.0 618.0,13.2 625.0,14.7 651.0,22.9 691.0,38.6 723.0,53.9 757.0,73.9 770.0,82.7 787.0,95.6 808.8,115.0 828.0,136.1 837.1,148.0 848.8,166.0 850.0,166.7 865.0,154.9 878.0,147.6 890.0,143.8 902.0,143.0 908.0,143.7 915.0,145.9 924.9,151.0 936.0,160.4 946.2,173.0 948.0,177.0 935.0,175.0 926.0,175.4 920.0,177.7 915.5,182.0 893.1,234.0 872.5,277.0 853.0,312.7 845.1,325.0 836.0,337.1ZM790.0,457.7 789.0,457.7 787.0,455.3 786.6,453.0 787.5,452.0 787.5,444.0 788.5,443.0 788.5,435.0 789.5,434.0 789.5,426.0 790.5,425.0 790.5,416.0 791.5,415.0 791.5,407.0 792.5,406.0 792.5,398.0 793.5,397.0 793.5,389.0 794.5,388.0 794.5,379.0 795.5,378.0 795.5,370.0 796.5,369.0 796.5,361.0 797.5,360.0 797.5,352.0 798.5,351.0 798.5,342.0 799.5,341.0 799.5,333.0 800.5,332.0 800.5,324.0 801.5,323.0 801.5,315.0 802.5,314.0 802.5,305.0 803.5,304.0 803.5,296.0 804.5,295.0 805.0,290.2 816.0,284.6 817.5,286.0 822.2,306.0 823.8,321.0 825.2,350.0 824.3,365.0 805.6,416.0 804.5,421.0 801.6,427.0 798.6,437.0 794.6,446.0 793.1,452.0 790.0,457.7Z"/></svg>
       </div>
       <p class="hero-hint eyebrow" aria-hidden="true"><span class="hint-desk">Move your cursor to guide the eagle</span><span class="hint-touch">Tap anywhere to guide the eagle</span></p>
     </div>
-    <div class="hero-copy" data-sd-hero-stage>
-      <div data-sd-hero-copy>
-        <p class="eyebrow" data-sd-intro="p" style="margin-bottom:18px">Roamance Trips and Holidays</p>
+    <div class="hero-copy">
+      <div>
         <h1 data-sd-intro="h">Your Holidays,<br> Closer to Heart.</h1>
       </div>
       <div class="hero-side" data-sd-intro="ctn">
-        <p class="lede">Thoughtfully planned holidays. Meaningful experiences. Care that travels with you.</p>
-        <div class="btn-row"><a class="btn" href="/tour-packages/" data-sd-magnetic="20"><span data-sd-magnetic-inner>Explore Tour Packages</span></a><a class="btn ghost" href="/contact-us/">Plan My Holiday</a></div>
+        <p class="lede">Domestic and international holidays, planned around the moments that matter to you.</p>
+        <div class="btn-row"><a class="btn" href="/tour-packages/" data-sd-magnetic="20"><span data-sd-magnetic-inner>Explore Journeys</span></a><a class="btn ghost" href="/contact-us/">Plan My Holiday</a></div>
       </div>
     </div>
   </div>
 </section>
 {torn('top', 2, CREAM)}
 
-<section class="pad wrap" data-sd-bg="light">
-  <p class="eyebrow center" style="margin-bottom:24px" data-sd-reveal="lines">More Than a Journey. A Family That Travels With You.</p>
-  <p class="quote" data-sd-highlight>At Roamance, every holiday begins with understanding you.</p>
-  <div class="qs" data-sd-reveal="lines"><span>Where do you dream of going?</span><span>What makes a holiday special for you?</span><span>Who will be sharing the experience?</span></div>
-  <div class="grid2 top" style="margin-top:clamp(64px,10vh,120px)">
-    <div class="frame r-16x10" data-sd-zoom>{img('home-intro', 'plan', 'Latte beside an open map, ready for travel planning', 'data-sd-zoom-target')}</div>
+<section class="pad wrap" data-sd-bg="light" id="about">
+  <div class="grid2 intro">
+    <div class="frame r-16x10">{img('home-intro', 'plan', 'Latte beside an open map, ready for travel planning')}</div>
     <div data-sd-reveal-group>
-      <div class="rule" data-sd-reveal="rule"></div>
-      <p data-sd-reveal="lines" style="margin-bottom:18px">Discover India and explore the world with Roamance Trips and Holidays. From family holidays and romantic getaways to solo adventures and luxury escapes, we help you plan a journey around the moments that matter to you.</p>
-      <p class="lede" data-sd-reveal="lines">Your answers help us shape a journey that feels personal, comfortable and memorable.</p>
-      <p data-sd-reveal="lines" style="margin-top:16px">With thoughtful planning, clear communication and genuine care, we want you to feel part of the Roamance family from your first enquiry to your return home.</p>
-      <div style="margin-top:28px" data-sd-reveal="block"><a class="link" href="/about-us/">Our story</a></div>
+      <p class="eyebrow" data-sd-reveal="lines">Our approach</p>
+      <h2 class="h2-s" data-sd-reveal="words">Every holiday begins with understanding you.</h2>
+      <ul class="asks" data-sd-reveal="lines"><li>Where do you dream of going?</li><li>What makes a holiday special for you?</li><li>Who will be sharing it?</li></ul>
+      <p data-sd-reveal="lines">Your answers shape the plan, from the places and the pace to the people it is for. We stay with you from the first enquiry to your return home.</p>
     </div>
   </div>
 </section>
 {torn('bottom', 3)}
 
-<section class="theme-dark" data-sd-bg="dark">
-  <div class="wrap hs-head" style="padding-top:clamp(72px,12vh,150px)" data-sd-reveal-group>
-    <h2 data-sd-reveal="words" style="max-width:11ch">Your Next Journey Starts Here</h2>
-    <p data-sd-reveal="lines">Five ways to travel with us. Tap a card to see what each holiday can feel like.</p>
-  </div>
-  <section class="hs" data-sd-hscroll>
-    <div class="sd-sticky">
-      <ul data-sd-hscroll-track style="list-style:none;margin:0">
+<section class="pad theme-dark" data-sd-bg="dark" id="journeys">
+  <div class="wrap">
+    <h2 class="h2-s" data-sd-reveal="words">Your Next Journey Starts Here</h2>
+    <ul class="cards">
 {chr(10).join(cards)}
-      </ul>
-    </div>
-  </section>
+    </ul>
+  </div>
 </section>
 {torn('top', 9)}
 
-<section class="pad" data-sd-bg="light">
-  <h2 class="drift wrap" data-sd-parallax="drift"><span>Popular</span><span>Destinations</span></h2>
-  <div class="row wrap" style="margin-top:48px" data-sd-slider-reveal data-sd-tip-btn="drag">
+<section class="pad wrap" data-sd-bg="light" id="destinations">
+  <h2 class="h2-s" data-sd-reveal="words">Popular Destinations</h2>
+  <div class="dest-grid">
 {dests}
   </div>
-  <p class="wrap credit" style="margin-top:20px">Europe covers a range of countries — itineraries are shaped around the places you would like to see.</p>
 </section>
 
-<section data-sd-grow data-sd-bg="light">
-  <div class="grow-title"><h2 data-sd-grow-title>Why Travel<br>With Roamance?</h2></div>
-  <div class="grow-gap" data-sd-grow-gap></div>
-  <div class="wrap" style="padding-bottom:clamp(72px,13vh,170px)">
-    <div class="reasons" data-sd-reveal-group data-sd-index>
+<section class="pad wrap" data-sd-bg="light" id="why" style="padding-top:0">
+  <h2 class="h2-s" data-sd-reveal="words">Why Travel With Roamance?</h2>
+  <div class="reasons" data-sd-reveal-group data-sd-index>
 {reasons}
-    </div>
   </div>
 </section>
 
-{torn('bottom', 17, CHARCOAL)}
-<section class="pad-s theme-charcoal" data-sd-bg="charcoal" aria-label="Our philosophy">
-  <div class="marquee" data-sd-marquee="26" aria-hidden="true">
-    <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
-    <div data-sd-marquee-list><span>People Before Profit ✦</span><span>Luxury With a Heart ✦</span></div>
-  </div>
-</section>
-{torn('top', 21, CHARCOAL)}
-
-<section class="pad wrap" data-sd-bg="light">
-  <div class="grid2 top">
-    <div data-sd-reveal-group>
-      <p class="eyebrow" data-sd-reveal="lines">Close to home</p>
-      <h2 data-sd-reveal="words" style="margin-top:16px">Your Travel Partner in <span data-biz="city" data-fallback="Every Season"></span></h2>
-      <div class="rule" data-sd-reveal="rule" style="margin-top:32px"></div>
-      <p data-sd-reveal="lines">Looking for a travel agency<span data-biz-wrap="city"> in <span data-biz="city"></span></span> to help plan a domestic or international holiday? Connect with Roamance Trips and Holidays for personal guidance, tour package enquiries and thoughtful holiday planning.</p>
-      <div style="margin-top:28px" data-sd-reveal="block"><a class="btn" href="/contact-us/"><span>Talk to Our Team</span></a></div>
-    </div>
-    <div class="frame r-4x5 plx" data-sd-parallax-wrap>{img('home-local', 'city', 'Two friends planning a trip together on a laptop', 'data-sd-parallax="img"')}</div>
-  </div>
-</section>
-
-{faq_section(['what', 'types', 'quote', 'custom', 'where'])}
-
-{torn('bottom', 33)}
-{cta_band('Let’s Turn Your Travel Plans Into Beautiful Memories.', 'A destination on your mind? A special occasion coming up? Your next chapter begins with a conversation.', 'Talk to Our Team', bg='dark')}
+{faq_section(['custom', 'incl', 'cost', 'visa', 'where'])}
 '''
 
 # ------------------------------------------------------------------ ABOUT
 about = f'''<section class="phero" data-sd-bg="light">
   <p class="eyebrow" data-sd-intro="p" style="margin-bottom:20px">About Roamance</p>
   <h1 data-sd-intro="h">More Than a Journey. A Family That Travels With You.</h1>
-  <div class="phero-media" data-sd-intro-media data-sd-parallax-wrap>{img('about-hero', 'backwater', 'Lone rower crossing a calm lake at golden hour', 'data-sd-parallax="img" loading="eager"')}</div>
+  <div class="phero-media" data-sd-intro-media>{img('about-hero', 'backwater', 'Lone rower crossing a calm lake at golden hour', 'loading="eager"')}</div>
 </section>
 
 <section class="pad wrap" data-sd-bg="light" style="padding-top:0">
@@ -371,7 +324,7 @@ about = f'''<section class="phero" data-sd-bg="light">
 
 <section class="pad wrap theme-dark" data-sd-bg="dark">
   <div class="grid2 top">
-    <div class="frame r-3x4 plx" data-sd-parallax-wrap>{img('about-philosophy', 'family', 'Grandmother in a sari hugging her laughing granddaughter', 'data-sd-parallax="img"')}</div>
+    <div class="frame r-3x4">{img('about-philosophy', 'family', 'Grandmother in a sari hugging her laughing granddaughter',)}</div>
     <div>
       <div data-sd-reveal-group>
         <p class="eyebrow" data-sd-reveal="lines">02 — Our philosophy</p>
@@ -402,16 +355,9 @@ about = f'''<section class="phero" data-sd-bg="light">
   </div>
 </section>
 
-<section class="pad-s" data-sd-bg="light" aria-label="Luxury with a heart">
-  <div class="marquee" data-sd-marquee="30" aria-hidden="true">
-    <div data-sd-marquee-list><span>Luxury With a Heart ✦</span><span>Luxury With a Heart ✦</span></div>
-    <div data-sd-marquee-list><span>Luxury With a Heart ✦</span><span>Luxury With a Heart ✦</span></div>
-  </div>
-</section>
-
 <section class="pad wrap" data-sd-bg="light" style="padding-top:clamp(24px,4vh,48px)">
   <div class="grid2 top">
-    <div class="frame r-16x10" data-sd-zoom>{img('about-luxury', 'island', 'Infinity pool overlooking the sea and a rocky headland', 'data-sd-zoom-target')}</div>
+    <div class="frame r-16x10">{img('about-luxury', 'island', 'Infinity pool overlooking the sea and a rocky headland')}</div>
     <div data-sd-reveal-group>
       <p class="eyebrow" data-sd-reveal="lines">04 — Luxury with a heart</p>
       <div class="rule" data-sd-reveal="rule"></div>
@@ -445,7 +391,7 @@ def pk(i, d, dark=False):
     sid, h, p, cta, im, art, alt, tag = d
     tagline = f'<p class="eyebrow" data-sd-reveal="lines" style="margin-top:14px">{tag}</p>' if tag else ''
     return f'''  <article class="pk{' flip' if i % 2 else ''}" id="{sid}">
-    <div class="pk-media" data-sd-parallax-wrap>{img(im, art, alt, 'data-sd-parallax="img"')}</div>
+    <div class="pk-media">{img(im, art, alt,)}</div>
     <div data-sd-reveal-group>
       <span class="idx" data-sd-reveal="lines">0{i + 1} / 06</span>
       <h2 data-sd-reveal="words">{h}</h2>
@@ -574,14 +520,13 @@ contact = f'''<section class="phero" data-sd-bg="light">
         <li data-biz-wrap="email"><span>Email</span><a data-biz-href="email" data-biz="email"></a></li>
         <li data-biz-wrap="address"><span>Visit</span><span style="all:unset" data-biz="fullAddress"></span></li>
         <li data-biz-wrap="hours"><span>Hours</span><span style="all:unset" data-biz="hours"></span></li>
-        <li><span>Enquire</span>Use the form to share your holiday idea — we will get back to you.</li>
       </ul>
       <div class="btn-row" style="margin-top:24px" data-biz-wrap="phone whatsapp mapUrl">
         <a class="btn" data-biz-wrap="phone" data-biz-href="phone"><span>Call Us</span></a>
         <a class="btn ghost" data-biz-wrap="whatsapp" data-biz-href="whatsapp">Chat on WhatsApp</a>
         <a class="btn ghost" data-biz-wrap="mapUrl" data-biz-href="mapUrl">Get Directions</a>
       </div>
-      <div class="frame r-4x3" style="margin-top:40px" data-sd-zoom>{img('contact', 'plan', 'Passport on an open notebook next to a cup of tea', 'data-sd-zoom-target')}</div>
+      <div class="frame r-4x3" style="margin-top:40px">{img('contact', 'plan', 'Passport on an open notebook next to a cup of tea')}</div>
     </div>
 
     <form id="enquiry" class="form" novalidate>
