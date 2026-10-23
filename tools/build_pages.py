@@ -561,7 +561,7 @@ contact = f'''<section class="phero" data-sd-bg="light">
   </div>
 </section>
 
-<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp(72px,13vh,170px)">
+<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp(24px,4vh,48px)">
   <div class="ct">
     <div>
       <div data-sd-reveal-group>

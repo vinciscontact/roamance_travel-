@@ -26,9 +26,9 @@ html = sub1(r'<section class="theme-dark" data-sd-bg="dark">', '<section class="
 html = sub1(r'<section class="pad" data-sd-bg="light">\n  <h2 class="drift', '<section class="pad" data-sd-bg="light" id="destinations">\n  <h2 class="drift', html)
 
 # 2. enquiry form + contact details from the Contact page, placed before the FAQ
-form = re.search(r'<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp\(72px,13vh,170px\)">.*?</section>', contact, re.S).group(0)
-form = form.replace('<section class="wrap" data-sd-bg="light"', '<section class="wrap pad" data-sd-bg="light" id="contact"', 1)
-form = form.replace('style="padding-bottom:clamp(72px,13vh,170px)"', '', 1).replace('../assets/', './assets/')
+form = re.search(r'<section class="wrap" data-sd-bg="light" style="padding-bottom:clamp\(24px,4vh,48px\)">.*?</section>', contact, re.S).group(0)
+form = form.replace('<section class="wrap" data-sd-bg="light"', '<section class="wrap" data-sd-bg="light" id="contact"', 1)
+form = form.replace('style="padding-bottom:clamp(24px,4vh,48px)"', 'style="padding-block:clamp(72px,13vh,170px) clamp(24px,4vh,48px)"', 1).replace('../assets/', './assets/')
 form = re.sub(r'Please read our <a href="[^"]*">Privacy Policy</a>\.', 'We use your details only to respond to your enquiry.', form)
 html = sub1(r'(<section class="pad wrap" data-sd-bg="light" id="faq">)', form.replace('\\', '\\\\') + '\n\n' + r'\1', html)
 
@@ -53,7 +53,9 @@ leftover = re.findall(r'href="\./(?!assets/)[^"]*"', html)
 assert not leftover, leftover
 
 # 5. copy only the files the home page uses
-if os.path.isdir(OUT): shutil.rmtree(OUT)
+def _force(func, path, exc):   # git marks its objects read-only on Windows
+    os.chmod(path, 0o666); func(path)
+if os.path.isdir(OUT): shutil.rmtree(OUT, onexc=_force)
 os.makedirs(OUT)
 open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(html)
 used = set(re.findall(r'(?:src|href|content)="(?:\./|' + re.escape(DOMAIN) + r')(assets/[^"?#]+)', html))
@@ -88,7 +90,8 @@ ErrorDocument 404 /index.html
 
 zpath = os.path.join(ROOT, 'dist-home.zip')
 with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
-    for base, _, files in os.walk(OUT):
+    for base, dirs, files in os.walk(OUT):
+        dirs[:] = [d for d in dirs if d != '.git']
         for f in files:
             full = os.path.join(base, f); z.write(full, os.path.relpath(full, OUT))
 print('files:', sum(len(f) for _, _, f in os.walk(OUT)), '| zip KB:', os.path.getsize(zpath) // 1024)
