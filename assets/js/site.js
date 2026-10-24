@@ -203,7 +203,7 @@
       const text = encodeURIComponent(lines.join('\n'));
       if (B.whatsapp) { window.open('https://wa.me/' + B.whatsapp.replace(/\D/g, '') + '?text=' + text, '_blank', 'noopener'); say('WhatsApp has opened with your enquiry — press send there to share it with us.'); return; }
       if (B.email) { location.href = 'mailto:' + B.email + '?subject=' + encodeURIComponent('Holiday enquiry') + '&body=' + text; say('Your email app has opened with your enquiry — press send there to share it with us.'); return; }
-      say('Online enquiries are being set up. Please check back shortly.');
+      say(B.phone ? `Online enquiries are being set up. Please call us on ${B.phone} and we will help you plan.` : 'Online enquiries are being set up. Please check back shortly.');
     });
   }
 

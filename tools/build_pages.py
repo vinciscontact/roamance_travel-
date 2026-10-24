@@ -33,7 +33,7 @@ FAQ = {
   'incl': ('What is included in a tour package?', 'Inclusions vary by package. Refer to your quotation for accommodation, transport, meals, activities and other arrangements. Review the exclusions and booking terms before confirming.', ''),
   'cost': ('How much does a holiday package cost?', 'The cost depends on your destination, dates, trip duration, number of travellers, accommodation and selected arrangements. <a href="/contact-us/">Request a quotation</a> based on your travel preferences.', ''),
   'visa': ('Are flights and visa fees included?', 'Check your specific quotation. Flights, visa fees, insurance, taxes and other charges should be identified as included, excluded or separately payable.', ''),
-  'where': ('Where is Roamance Trips and Holidays located?', 'Roamance Trips and Holidays is located at <span data-biz="fullAddress"></span>. Contact us on <span data-biz="phone" data-fallback="the number on our contact page"></span> or <span data-biz="email" data-fallback="email"></span> for holiday enquiries.', 'address'),
+  'where': ('Where is Roamance Trips and Holidays located?', 'Roamance Trips and Holidays is located at <span data-biz="fullAddress"></span>. Call us on <span data-biz="phone" data-fallback="the number on our contact page"></span><span data-biz-wrap="email"> or email <span data-biz="email"></span></span> for holiday enquiries.', 'address'),
 }
 
 def faq_section(keys, title='Questions, Answered', bg='light'):
@@ -589,11 +589,11 @@ notfound = '''<section class="phero" data-sd-bg="light" style="min-height:80vh">
 </section>'''
 
 PAGES = {
-  'index.html': page('/', 'Roamance Trips and Holidays — Travel Agency for Domestic &amp; International Holidays', 'Plan domestic and international holidays with Roamance. Explore family trips, honeymoons and personalised travel with thoughtful care.', 'More than a journey — a family that travels with you', home),
+  'index.html': page('/', 'Roamance Trips and Holidays — Travel Agency in Chennai', 'Plan domestic and international holidays with Roamance in Chennai. Explore family trips, honeymoons and personalised travel with thoughtful care.', 'More than a journey — a family that travels with you', home),
   'about-us/index.html': page('/about-us/', 'About Roamance — Holidays With Personal Care', 'Meet Roamance Trips and Holidays. Discover our people-first approach to travel, clear communication and meaningful holiday experiences.', 'People before profit', about),
   'tour-packages/index.html': page('/tour-packages/', 'Domestic &amp; International Tour Packages — Roamance', 'Explore domestic and international holiday options with Roamance. Enquire about family trips, honeymoons, luxury escapes and customised itineraries.', 'Find a holiday that feels like you', tours),
   'gallery/index.html': page('/gallery/', 'Travel Gallery — Roamance Trips and Holidays', 'Explore destination photographs and travel inspiration from Roamance. Find ideas for your next family holiday, romantic getaway or international trip.', 'Beautiful places, meaningful moments', gallery),
-  'contact-us/index.html': page('/contact-us/', 'Contact Roamance — Holiday Planning', 'Contact Roamance Trips and Holidays. Share your destination, dates and budget to discuss your next domestic or international holiday.', 'Every holiday begins with a conversation', contact),
+  'contact-us/index.html': page('/contact-us/', 'Contact Roamance — Holiday Planning in Chennai', 'Contact Roamance Trips and Holidays in Anna Nagar West, Chennai. Share your destination, dates and budget to discuss your next domestic or international holiday.', 'Every holiday begins with a conversation', contact),
   'privacy-policy/index.html': policy('Privacy Policy', '/privacy-policy/'),
   'terms-and-conditions/index.html': policy('Terms &amp; Conditions', '/terms-and-conditions/'),
   'cancellation-refund-policy/index.html': policy('Cancellation &amp; Refund Policy', '/cancellation-refund-policy/'),
