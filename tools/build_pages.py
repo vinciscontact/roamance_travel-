@@ -286,8 +286,8 @@ home = f'''<section class="hero-area theme-dark" data-sd-hero-out data-sd-bg="da
 </section>
 {torn('top', 9)}
 
-<section class="pad wrap" data-sd-bg="light" id="destinations">
-  <h2 class="h2-s drift" data-sd-parallax="drift"><span>Popular</span><span>Destinations</span></h2>
+<section class="pad wrap" data-sd-bg="light" id="destinations" style="padding-bottom:0">
+  <h2 class="h2-s" data-sd-reveal="words">Popular Destinations</h2>
   <div class="dest-grid" data-sd-slider-reveal>
 {dests}
   </div>
