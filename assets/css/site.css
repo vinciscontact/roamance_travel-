@@ -77,8 +77,8 @@ body::after{content:"";position:fixed;inset:0;z-index:1200;pointer-events:none;o
 .pre-line{margin:28px auto 0;max-width:46ch;text-wrap:balance;letter-spacing:.18em;padding-left:.18em}
 
 /* ---------- hero (home): dotted map + eagle ---------- */
-.hero-area{height:100vh;min-height:620px}
-.hero-sticky{position:relative;height:100%;overflow:hidden;cursor:crosshair}
+.hero-area{height:220vh}
+.hero-sticky{position:sticky;top:0;height:100vh;min-height:620px;overflow:hidden;cursor:crosshair}
 .hero-card{position:absolute;inset:0;transform-origin:50% 50%;background:var(--sd-paper);overflow:hidden}
 .hero-media{position:absolute;inset:0}
 .hero-media canvas{display:block}
@@ -99,7 +99,8 @@ body::after{content:"";position:fixed;inset:0;z-index:1200;pointer-events:none;o
 .hero-side{display:contents}
 .hero-side .lede{max-width:34ch}
 @media (max-width:991px){
-  .hero-area{height:100svh;min-height:600px}
+  .hero-area{height:auto}
+  .hero-sticky{position:relative;height:100svh;min-height:600px}
   .hero-copy{grid-template-columns:1fr;gap:18px;padding-bottom:64px}
   .hero-copy h1{max-width:9ch}
   .hero-hint{left:clamp(16px,4vw,72px);right:auto;bottom:22px}

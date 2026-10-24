@@ -207,7 +207,7 @@ CATS = [
 ]
 cards = []
 for i, (name, h, p, cta, href, im, art, alt) in enumerate(CATS, 1):
-    cards.append(f'''        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+    cards.append(f'''        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           {img(im, art, alt, 'loading="eager"')}
           <div class="card-top"><span class="num eyebrow">0{i}</span>{plus()}</div>
           <h3 data-sd-expand-name>{name}</h3>
@@ -237,17 +237,17 @@ REASONS = [
 ]
 reasons = '\n'.join(f'''      <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>{h}</h3><p>{p}</p></div>''' for h, p in REASONS)
 
-home = f'''<section class="hero-area theme-dark" data-sd-bg="dark">
+home = f'''<section class="hero-area theme-dark" data-sd-hero-out data-sd-bg="dark">
   <div class="hero-sticky">
-    <div class="hero-card" data-hero-map>
+    <div class="hero-card" data-sd-hero-card data-hero-map>
       <div class="hero-media" data-sd-intro-media><canvas id="hero-map" aria-hidden="true"></canvas></div>
       <div class="eagle" data-eagle aria-hidden="true">
         <svg viewBox="612 8 342 455"><path class="eagle-tail" data-eagle-tail d="M786.0,453.8 768.2,428.0 762.6,421.0 760.0,416.0 709.7,343.0 709.3,341.0 714.0,337.9 799.0,292.6 804.0,290.8 804.5,295.0 803.5,296.0 803.5,304.0 802.5,305.0 802.5,314.0 801.5,315.0 801.5,323.0 800.5,324.0 800.5,332.0 799.5,333.0 799.5,341.0 798.5,342.0 798.5,351.0 797.5,352.0 797.5,360.0 796.5,361.0 796.5,369.0 795.5,370.0 795.5,378.0 794.5,379.0 794.5,388.0 793.5,389.0 793.5,397.0 792.5,398.0 792.5,406.0 791.5,407.0 791.5,415.0 790.5,416.0 790.5,425.0 789.5,426.0 789.5,434.0 788.5,435.0 788.5,443.0 787.5,444.0 787.4,452.0 786.0,453.8Z"/><path class="eagle-wing" data-eagle-wing d="M836.0,337.1 834.0,337.7 833.4,336.0 833.4,324.0 832.6,314.0 830.2,297.0 828.5,290.0 828.5,286.0 826.0,274.0 820.5,252.0 813.3,229.0 805.1,208.0 796.5,189.0 785.3,168.0 772.4,147.0 757.3,126.0 743.3,109.0 727.5,92.0 708.0,73.8 690.0,59.0 668.0,43.3 648.0,30.7 619.1,15.0 617.4,14.0 618.0,13.2 625.0,14.7 651.0,22.9 691.0,38.6 723.0,53.9 757.0,73.9 770.0,82.7 787.0,95.6 808.8,115.0 828.0,136.1 837.1,148.0 848.8,166.0 850.0,166.7 865.0,154.9 878.0,147.6 890.0,143.8 902.0,143.0 908.0,143.7 915.0,145.9 924.9,151.0 936.0,160.4 946.2,173.0 948.0,177.0 935.0,175.0 926.0,175.4 920.0,177.7 915.5,182.0 893.1,234.0 872.5,277.0 853.0,312.7 845.1,325.0 836.0,337.1ZM790.0,457.7 789.0,457.7 787.0,455.3 786.6,453.0 787.5,452.0 787.5,444.0 788.5,443.0 788.5,435.0 789.5,434.0 789.5,426.0 790.5,425.0 790.5,416.0 791.5,415.0 791.5,407.0 792.5,406.0 792.5,398.0 793.5,397.0 793.5,389.0 794.5,388.0 794.5,379.0 795.5,378.0 795.5,370.0 796.5,369.0 796.5,361.0 797.5,360.0 797.5,352.0 798.5,351.0 798.5,342.0 799.5,341.0 799.5,333.0 800.5,332.0 800.5,324.0 801.5,323.0 801.5,315.0 802.5,314.0 802.5,305.0 803.5,304.0 803.5,296.0 804.5,295.0 805.0,290.2 816.0,284.6 817.5,286.0 822.2,306.0 823.8,321.0 825.2,350.0 824.3,365.0 805.6,416.0 804.5,421.0 801.6,427.0 798.6,437.0 794.6,446.0 793.1,452.0 790.0,457.7Z"/></svg>
       </div>
       <p class="hero-hint eyebrow" aria-hidden="true"><span class="hint-desk">Move your cursor to guide the eagle</span><span class="hint-touch">Tap anywhere to guide the eagle</span></p>
     </div>
-    <div class="hero-copy">
-      <div>
+    <div class="hero-copy" data-sd-hero-stage>
+      <div data-sd-hero-copy>
         <h1 data-sd-intro="h">Your Holidays,<br> Closer to Heart.</h1>
       </div>
       <div class="hero-side" data-sd-intro="ctn">
@@ -272,27 +272,34 @@ home = f'''<section class="hero-area theme-dark" data-sd-bg="dark">
 </section>
 {torn('bottom', 3)}
 
-<section class="pad theme-dark" data-sd-bg="dark" id="journeys">
-  <div class="wrap">
-    <h2 class="h2-s" data-sd-reveal="words">Your Next Journey Starts Here</h2>
-    <ul class="cards">
-{chr(10).join(cards)}
-    </ul>
+<section class="theme-dark" data-sd-bg="dark" id="journeys">
+  <div class="wrap" style="padding-top:clamp(52px,8vh,104px)">
+    <h2 class="h2-s" data-sd-reveal="words" style="margin-bottom:0">Your Next Journey Starts Here</h2>
   </div>
+  <section class="hs" data-sd-hscroll>
+    <div class="sd-sticky">
+      <ul data-sd-hscroll-track style="list-style:none;margin:0">
+{chr(10).join(cards)}
+      </ul>
+    </div>
+  </section>
 </section>
 {torn('top', 9)}
 
 <section class="pad wrap" data-sd-bg="light" id="destinations">
-  <h2 class="h2-s" data-sd-reveal="words">Popular Destinations</h2>
-  <div class="dest-grid">
+  <h2 class="h2-s drift" data-sd-parallax="drift"><span>Popular</span><span>Destinations</span></h2>
+  <div class="dest-grid" data-sd-slider-reveal>
 {dests}
   </div>
 </section>
 
-<section class="pad wrap" data-sd-bg="light" id="why" style="padding-top:0">
-  <h2 class="h2-s" data-sd-reveal="words">Why Travel With Roamance?</h2>
-  <div class="reasons" data-sd-reveal-group data-sd-index>
+<section data-sd-grow data-sd-bg="light" id="why">
+  <div class="grow-title"><h2 data-sd-grow-title>Why Travel<br>With Roamance?</h2></div>
+  <div class="grow-gap" data-sd-grow-gap></div>
+  <div class="wrap" style="padding-bottom:clamp(52px,8vh,104px)">
+    <div class="reasons" data-sd-reveal-group data-sd-index>
 {reasons}
+    </div>
   </div>
 </section>
 

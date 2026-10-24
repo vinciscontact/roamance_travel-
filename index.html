@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/sd-base.css?v=2fc8dcc3">
-<link rel="stylesheet" href="./assets/css/site.css?v=3368d356">
+<link rel="stylesheet" href="./assets/css/site.css?v=13c77a62">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true" focusable="false">
@@ -49,17 +49,17 @@
 </header>
 
 <main id="main">
-<section class="hero-area theme-dark" data-sd-bg="dark">
+<section class="hero-area theme-dark" data-sd-hero-out data-sd-bg="dark">
   <div class="hero-sticky">
-    <div class="hero-card" data-hero-map>
+    <div class="hero-card" data-sd-hero-card data-hero-map>
       <div class="hero-media" data-sd-intro-media><canvas id="hero-map" aria-hidden="true"></canvas></div>
       <div class="eagle" data-eagle aria-hidden="true">
         <svg viewBox="612 8 342 455"><path class="eagle-tail" data-eagle-tail d="M786.0,453.8 768.2,428.0 762.6,421.0 760.0,416.0 709.7,343.0 709.3,341.0 714.0,337.9 799.0,292.6 804.0,290.8 804.5,295.0 803.5,296.0 803.5,304.0 802.5,305.0 802.5,314.0 801.5,315.0 801.5,323.0 800.5,324.0 800.5,332.0 799.5,333.0 799.5,341.0 798.5,342.0 798.5,351.0 797.5,352.0 797.5,360.0 796.5,361.0 796.5,369.0 795.5,370.0 795.5,378.0 794.5,379.0 794.5,388.0 793.5,389.0 793.5,397.0 792.5,398.0 792.5,406.0 791.5,407.0 791.5,415.0 790.5,416.0 790.5,425.0 789.5,426.0 789.5,434.0 788.5,435.0 788.5,443.0 787.5,444.0 787.4,452.0 786.0,453.8Z"/><path class="eagle-wing" data-eagle-wing d="M836.0,337.1 834.0,337.7 833.4,336.0 833.4,324.0 832.6,314.0 830.2,297.0 828.5,290.0 828.5,286.0 826.0,274.0 820.5,252.0 813.3,229.0 805.1,208.0 796.5,189.0 785.3,168.0 772.4,147.0 757.3,126.0 743.3,109.0 727.5,92.0 708.0,73.8 690.0,59.0 668.0,43.3 648.0,30.7 619.1,15.0 617.4,14.0 618.0,13.2 625.0,14.7 651.0,22.9 691.0,38.6 723.0,53.9 757.0,73.9 770.0,82.7 787.0,95.6 808.8,115.0 828.0,136.1 837.1,148.0 848.8,166.0 850.0,166.7 865.0,154.9 878.0,147.6 890.0,143.8 902.0,143.0 908.0,143.7 915.0,145.9 924.9,151.0 936.0,160.4 946.2,173.0 948.0,177.0 935.0,175.0 926.0,175.4 920.0,177.7 915.5,182.0 893.1,234.0 872.5,277.0 853.0,312.7 845.1,325.0 836.0,337.1ZM790.0,457.7 789.0,457.7 787.0,455.3 786.6,453.0 787.5,452.0 787.5,444.0 788.5,443.0 788.5,435.0 789.5,434.0 789.5,426.0 790.5,425.0 790.5,416.0 791.5,415.0 791.5,407.0 792.5,406.0 792.5,398.0 793.5,397.0 793.5,389.0 794.5,388.0 794.5,379.0 795.5,378.0 795.5,370.0 796.5,369.0 796.5,361.0 797.5,360.0 797.5,352.0 798.5,351.0 798.5,342.0 799.5,341.0 799.5,333.0 800.5,332.0 800.5,324.0 801.5,323.0 801.5,315.0 802.5,314.0 802.5,305.0 803.5,304.0 803.5,296.0 804.5,295.0 805.0,290.2 816.0,284.6 817.5,286.0 822.2,306.0 823.8,321.0 825.2,350.0 824.3,365.0 805.6,416.0 804.5,421.0 801.6,427.0 798.6,437.0 794.6,446.0 793.1,452.0 790.0,457.7Z"/></svg>
       </div>
       <p class="hero-hint eyebrow" aria-hidden="true"><span class="hint-desk">Move your cursor to guide the eagle</span><span class="hint-touch">Tap anywhere to guide the eagle</span></p>
     </div>
-    <div class="hero-copy">
-      <div>
+    <div class="hero-copy" data-sd-hero-stage>
+      <div data-sd-hero-copy>
         <h1 data-sd-intro="h">Your Holidays,<br> Closer to Heart.</h1>
       </div>
       <div class="hero-side" data-sd-intro="ctn">
@@ -84,11 +84,14 @@
 </section>
 <div data-sd-torn="bottom" data-sd-torn-seed="3" style="color:#fbde22;margin-bottom:-1px"></div>
 
-<section class="pad theme-dark" data-sd-bg="dark" id="journeys">
-  <div class="wrap">
-    <h2 class="h2-s" data-sd-reveal="words">Your Next Journey Starts Here</h2>
-    <ul class="cards">
-        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+<section class="theme-dark" data-sd-bg="dark" id="journeys">
+  <div class="wrap" style="padding-top:clamp(52px,8vh,104px)">
+    <h2 class="h2-s" data-sd-reveal="words" style="margin-bottom:0">Your Next Journey Starts Here</h2>
+  </div>
+  <section class="hs" data-sd-hscroll>
+    <div class="sd-sticky">
+      <ul data-sd-hscroll-track style="list-style:none;margin:0">
+        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           <img src="./assets/img/cat-domestic.jpg" alt="Traveller standing on a tea plantation hill at sunrise" data-art="hills" decoding="async" onerror="this.dataset.missing=1" loading="eager">
           <div class="card-top"><span class="num eyebrow">01</span><span class="plus" aria-hidden="true"><i data-sd-expand-icon></i></span></div>
           <h3 data-sd-expand-name>Domestic Holidays</h3>
@@ -99,7 +102,7 @@
             <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
           </div>
         </li>
-        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           <img src="./assets/img/cat-international.jpg" alt="Lakeside alpine village with a church spire beneath misty mountains" data-art="alps" decoding="async" onerror="this.dataset.missing=1" loading="eager">
           <div class="card-top"><span class="num eyebrow">02</span><span class="plus" aria-hidden="true"><i data-sd-expand-icon></i></span></div>
           <h3 data-sd-expand-name>International Holidays</h3>
@@ -110,7 +113,7 @@
             <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
           </div>
         </li>
-        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           <img src="./assets/img/cat-honeymoon.jpg" alt="Couple walking hand in hand along the shore at sunset" data-art="couple" decoding="async" onerror="this.dataset.missing=1" loading="eager">
           <div class="card-top"><span class="num eyebrow">03</span><span class="plus" aria-hidden="true"><i data-sd-expand-icon></i></span></div>
           <h3 data-sd-expand-name>Honeymoon &amp; Romantic Getaways</h3>
@@ -121,7 +124,7 @@
             <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
           </div>
         </li>
-        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           <img src="./assets/img/cat-family.jpg" alt="Family watching the waves together on a beach" data-art="family" decoding="async" onerror="this.dataset.missing=1" loading="eager">
           <div class="card-top"><span class="num eyebrow">04</span><span class="plus" aria-hidden="true"><i data-sd-expand-icon></i></span></div>
           <h3 data-sd-expand-name>Family Holidays</h3>
@@ -132,7 +135,7 @@
             <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
           </div>
         </li>
-        <li class="card theme-charcoal" data-sd-expand tabindex="0">
+        <li class="card theme-charcoal" data-sd-hscroll-card data-sd-expand data-sd-tip-btn="open" tabindex="0">
           <img src="./assets/img/cat-personalised.jpg" alt="Hands marking a route on a city map beside glasses and pencils" data-art="plan" decoding="async" onerror="this.dataset.missing=1" loading="eager">
           <div class="card-top"><span class="num eyebrow">05</span><span class="plus" aria-hidden="true"><i data-sd-expand-icon></i></span></div>
           <h3 data-sd-expand-name>Personalised Holidays</h3>
@@ -143,14 +146,15 @@
             <span class="plus" aria-hidden="true"><i style="transform:translate(-50%,-50%) rotate(0deg)"></i></span>
           </div>
         </li>
-    </ul>
-  </div>
+      </ul>
+    </div>
+  </section>
 </section>
 <div data-sd-torn="top" data-sd-torn-seed="9" style="color:#fbde22;margin-top:-1px"></div>
 
 <section class="pad wrap" data-sd-bg="light" id="destinations">
-  <h2 class="h2-s" data-sd-reveal="words">Popular Destinations</h2>
-  <div class="dest-grid">
+  <h2 class="h2-s drift" data-sd-parallax="drift"><span>Popular</span><span>Destinations</span></h2>
+  <div class="dest-grid" data-sd-slider-reveal>
     <a class="dest" href="./tour-packages/#domestic"><div class="frame"><img src="./assets/img/dest-kerala.jpg" alt="Houseboat travelling through palm-lined Kerala backwaters" data-art="backwater" loading="lazy" decoding="async" onerror="this.dataset.missing=1"></div><div class="dest-meta"><h3>Kerala</h3><span>India</span></div></a>
     <a class="dest" href="./tour-packages/#domestic"><div class="frame"><img src="./assets/img/dest-goa.jpg" alt="Palm-fringed beach in Goa at golden hour" data-art="beach" loading="lazy" decoding="async" onerror="this.dataset.missing=1"></div><div class="dest-meta"><h3>Goa</h3><span>India</span></div></a>
     <a class="dest" href="./tour-packages/#domestic"><div class="frame"><img src="./assets/img/dest-kashmir.jpg" alt="Colourful shikaras moored on Dal Lake, Kashmir" data-art="snow" loading="lazy" decoding="async" onerror="this.dataset.missing=1"></div><div class="dest-meta"><h3>Kashmir</h3><span>India</span></div></a>
@@ -160,13 +164,16 @@
   </div>
 </section>
 
-<section class="pad wrap" data-sd-bg="light" id="why" style="padding-top:0">
-  <h2 class="h2-s" data-sd-reveal="words">Why Travel With Roamance?</h2>
-  <div class="reasons" data-sd-reveal-group data-sd-index>
+<section data-sd-grow data-sd-bg="light" id="why">
+  <div class="grow-title"><h2 data-sd-grow-title>Why Travel<br>With Roamance?</h2></div>
+  <div class="grow-gap" data-sd-grow-gap></div>
+  <div class="wrap" style="padding-bottom:clamp(52px,8vh,104px)">
+    <div class="reasons" data-sd-reveal-group data-sd-index>
       <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>People Before Profit</h3><p>Your happiness and experience guide the way we plan your journey.</p></div>
       <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>Clarity at Every Step</h3><p>Understand your itinerary, package inclusions, exclusions and costs before you book.</p></div>
       <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>Thoughtful Personal Attention</h3><p>We listen to your preferences and help you make informed travel choices.</p></div>
       <div class="reason" data-sd-reveal="block"><span class="idx" data-sd-index-text></span><h3>Luxury With a Heart</h3><p>For us, a special holiday combines comfort, memorable experiences and the reassurance of being cared for.</p></div>
+    </div>
   </div>
 </section>
 
